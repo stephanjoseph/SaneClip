@@ -6,6 +6,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ---
 
+## [1.1] - 2026-01-18
+
+### Added
+- **First-launch onboarding** — Welcome tutorial with permissions setup and keyboard shortcuts guide
+- **App source attribution** — See which app each clip came from with app icon
+- **Excluded apps list** — Block sensitive apps (1Password, banking apps) from clipboard capture
+- **Duplicate detection** — Automatically consolidate identical clips
+- **Keyboard navigation** — Arrow keys and vim-style j/k navigation in history
+- **Paste count badges** — Track how many times each item was pasted
+- **Menu bar icon options** — Choose between List and Minimal icon styles
+- **Sound effects toggle** — Optional paste confirmation sounds (opt-in)
+
+### Changed
+- **Security-by-default** — Authentication now required to reduce any security setting
+- **Smarter time display** — Compact format (41s → 15m → 2h → 3d)
+- **Compact stats** — Shows "21w · 350c" instead of verbose text
+- **Aligned metadata** — Fixed-width columns for cleaner visual scanning
+- **Renamed setting** — "Protect passwords" → "Ignore password manager copies" for clarity
+
+### Fixed
+- **Metadata no longer wraps** — Single-line metadata regardless of content length
+
+---
+
 ## [1.0.1] - 2026-01-18
 
 ### Fixed
@@ -41,8 +65,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
-### Planned for v1.1
-- App source attribution (show which app clips came from)
-- Exclude apps list (blacklist password managers, etc.)
-- Keyboard navigation in history list
+### Planned for v1.5
+- Multiple paste modes (plain text, UPPERCASE, lowercase, Title Case)
+- Smart snippets with placeholders
+- Rich search filters
 - See [ROADMAP.md](ROADMAP.md) for full plans

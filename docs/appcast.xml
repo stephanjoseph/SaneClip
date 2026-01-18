@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>SaneClip</title>
+    <link>https://saneclip.com/appcast.xml</link>
+    <description>Most recent changes with links to updates.</description>
+    <language>en</language>
+
+    <item>
+      <title>Version 1.1</title>
+      <link>https://saneclip.com</link>
+      <sparkle:version>2</sparkle:version>
+      <sparkle:shortVersionString>1.1</sparkle:shortVersionString>
+      <description><![CDATA[
+        <h2>SaneClip 1.1 - Phase 1 Polish</h2>
+        <h3>New Features</h3>
+        <ul>
+          <li><strong>First-launch onboarding</strong> - Welcome tutorial with permissions setup and keyboard shortcuts guide</li>
+          <li><strong>App source attribution</strong> - See which app each clip came from with app icon</li>
+          <li><strong>Excluded apps list</strong> - Block sensitive apps (1Password, banking apps) from clipboard capture</li>
+          <li><strong>Duplicate detection</strong> - Automatically consolidate identical clips</li>
+          <li><strong>Keyboard navigation</strong> - Arrow keys and vim-style j/k navigation in history</li>
+          <li><strong>Paste count badges</strong> - Track how many times each item was pasted</li>
+          <li><strong>Menu bar icon options</strong> - Choose between List and Minimal icon styles</li>
+          <li><strong>Sound effects toggle</strong> - Optional paste confirmation sounds</li>
+        </ul>
+        <h3>Improvements</h3>
+        <ul>
+          <li><strong>Security-by-default</strong> - Authentication required to reduce security settings</li>
+          <li><strong>Smarter time display</strong> - Compact format (41s, 15m, 2h, 3d)</li>
+          <li><strong>Compact stats</strong> - Shows "21w · 350c" instead of verbose text</li>
+          <li><strong>Aligned metadata</strong> - Fixed-width columns for cleaner visual scanning</li>
+          <li><strong>Renamed setting</strong> - "Ignore password manager copies" for clarity</li>
+        </ul>
+        <h3>Bug Fixes</h3>
+        <ul>
+          <li><strong>Metadata no longer wraps</strong> - Single-line metadata regardless of content length</li>
+        </ul>
+      ]]></description>
+      <pubDate>Sat, 18 Jan 2026 06:21:00 -0500</pubDate>
+      <enclosure
+        url="https://saneclip.com/releases/SaneClip-1.1.dmg"
+        sparkle:edSignature="D92SYL+cChpMITzz6b+hX3+I4cB+gchv1kVLl4l45wLfK3c48ezmcR9pM3ONUZBYRY9J92pVbofCUy32Zwe9DA=="
+        length="2037829"
+        type="application/octet-stream" />
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+    </item>
+
+    <item>
+      <title>Version 1.0.1</title>
+      <link>https://saneclip.com</link>
+      <sparkle:version>2</sparkle:version>
+      <sparkle:shortVersionString>1.0.1</sparkle:shortVersionString>
+      <description><![CDATA[
+        <h2>SaneClip 1.0.1 - Bug Fix Release</h2>
+        <h3>Bug Fixes</h3>
+        <ul>
+          <li><strong>Touch ID unlock loop</strong> - Using Touch ID no longer closes the clipboard history. Added 30-second grace period.</li>
+          <li><strong>Smoother popover after auth</strong> - Added slight delay for Touch ID dialog to fully dismiss.</li>
+        </ul>
+        <h3>Changes</h3>
+        <ul>
+          <li><strong>Broader compatibility</strong> - Now supports macOS 14 Sonoma and later (M1, M2, M3, M4).</li>
+        </ul>
+      ]]></description>
+      <pubDate>Sat, 18 Jan 2026 00:00:00 -0500</pubDate>
+      <enclosure
+        url="https://saneclip.com/releases/SaneClip-1.0.1.dmg"
+        length="2037860"
+        type="application/octet-stream" />
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+    </item>
+
+  </channel>
+</rss>

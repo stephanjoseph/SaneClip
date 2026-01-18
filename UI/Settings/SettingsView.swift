@@ -204,7 +204,7 @@ struct GeneralSettingsView: View {
                 }
 
                 CompactSection("Security") {
-                    CompactToggle(label: "Protect passwords (auto-clear)", isOn: Binding(
+                    CompactToggle(label: "Ignore password manager copies", isOn: Binding(
                         get: { settings.protectPasswords },
                         set: { newValue in
                             if newValue {
@@ -212,7 +212,7 @@ struct GeneralSettingsView: View {
                                 settings.protectPasswords = true
                             } else {
                                 // Turning OFF - always requires auth
-                                authenticateForSecurityChange(reason: "Authenticate to disable password protection") {
+                                authenticateForSecurityChange(reason: "Authenticate to allow password manager copies in history") {
                                     settings.protectPasswords = false
                                 }
                             }
