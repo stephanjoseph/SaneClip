@@ -112,6 +112,14 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for coding standards.
 - 💡 [Request a Feature](https://github.com/stephanjoseph/SaneClip/issues/new?template=feature_request.md)
 - ❤️ [Sponsor on GitHub](https://github.com/sponsors/stephanjoseph)
 
+### Crypto
+
+| Currency | Address |
+|----------|---------|
+| BTC | `3Go9nJu3dj2qaa4EAYXrTsTf5AnhcrPQke` |
+| SOL | `FBvU83GUmwEYk3HMwZh3GBorGvrVVWSPb8VLCKeLiWZZ` |
+| ZEC | `t1PaQ7LSoRDVvXLaQTWmy5tKUAiKxuE9hBN` |
+
 ---
 
 ## License
@@ -121,5 +129,5 @@ MIT — see [LICENSE](LICENSE) for details.
 ---
 
 <p align="center">
-  Made with ☕ by <a href="https://github.com/stephanjoseph">Stephan Joseph</a>
+  Made with ❤️ by <a href="https://github.com/stephanjoseph">Mr. Sane</a>
 </p>
