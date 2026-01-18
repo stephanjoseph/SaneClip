@@ -281,19 +281,39 @@ log_info "Version: ${VERSION} (${BUILD_NUMBER})"
 # Create DMG
 DMG_NAME="${APP_NAME}-${VERSION}"
 DMG_PATH="${BUILD_DIR}/${DMG_NAME}.dmg"
-DMG_TEMP="${BUILD_DIR}/dmg_temp"
+DMG_BACKGROUND="${PROJECT_ROOT}/scripts/dmg-resources/dmg-background.png"
 
 log_info "Creating DMG..."
-rm -rf "${DMG_TEMP}"
-mkdir -p "${DMG_TEMP}"
 
-cp -R "${APP_PATH}" "${DMG_TEMP}/"
-ln -s /Applications "${DMG_TEMP}/Applications"
-
-hdiutil create -volname "${APP_NAME}" \
-    -srcfolder "${DMG_TEMP}" \
-    -ov -format UDZO \
-    "${DMG_PATH}"
+# Use create-dmg for professional installer appearance
+if command -v create-dmg >/dev/null 2>&1 && [ -f "${DMG_BACKGROUND}" ]; then
+    log_info "Using create-dmg with custom background..."
+    create-dmg \
+        --volname "${APP_NAME}" \
+        --background "${DMG_BACKGROUND}" \
+        --window-pos 200 120 \
+        --window-size 660 400 \
+        --icon-size 128 \
+        --icon "${APP_NAME}.app" 160 220 \
+        --app-drop-link 500 220 \
+        --hide-extension "${APP_NAME}.app" \
+        --no-internet-enable \
+        "${DMG_PATH}" \
+        "${APP_PATH}"
+else
+    # Fallback to basic hdiutil if create-dmg not available
+    log_warn "create-dmg not found, using basic DMG creation..."
+    DMG_TEMP="${BUILD_DIR}/dmg_temp"
+    rm -rf "${DMG_TEMP}"
+    mkdir -p "${DMG_TEMP}"
+    cp -R "${APP_PATH}" "${DMG_TEMP}/"
+    ln -s /Applications "${DMG_TEMP}/Applications"
+    hdiutil create -volname "${APP_NAME}" \
+        -srcfolder "${DMG_TEMP}" \
+        -ov -format UDZO \
+        "${DMG_PATH}"
+    rm -rf "${DMG_TEMP}"
+fi
 
 # Sign DMG
 log_info "Signing DMG..."
@@ -321,9 +341,6 @@ fi
 # Copy to releases folder
 FINAL_DMG="${RELEASE_DIR}/${DMG_NAME}.dmg"
 cp "${DMG_PATH}" "${FINAL_DMG}"
-
-# Clean up
-rm -rf "${DMG_TEMP}"
 
 log_info "========================================"
 log_info "Release build complete!"
