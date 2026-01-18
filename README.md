@@ -27,6 +27,7 @@ Lock your clipboard history behind biometrics. 30-second grace period means no r
 - **⌘⇧V** — Open clipboard history
 - **⌘⌃1-9** — Paste items 1-9 instantly
 - **⌘⇧⌥V** — Paste as plain text
+- **↑↓ or j/k** — Navigate through history
 
 ### 📌 Pin Favorites
 Keep frequently-used text always accessible. Pinned items never expire.
@@ -34,11 +35,26 @@ Keep frequently-used text always accessible. Pinned items never expire.
 ### 🔍 Instant Search
 Filter your entire clipboard history as you type.
 
-### 🛡️ Password Protection
-Automatically detects and removes quick-cleared items (like from 1Password).
+### 🛡️ Privacy & Security
+- **Password detection** — Automatically skips quick-cleared items (like from 1Password)
+- **Excluded apps** — Block sensitive apps from clipboard capture entirely
+- **Touch ID** — Require authentication to view history
+
+### 📱 App Source Attribution
+See which app each clip came from with its icon. Know if that text came from Slack, VS Code, or Safari.
+
+### 🔢 Smart Organization
+- **Duplicate detection** — Identical clips automatically consolidate
+- **Paste count badges** — Track how many times you've used each item
+- **Compact timestamps** — See "2h" or "3d" instead of verbose dates
+
+### ⚙️ Customization
+- **Menu bar icon styles** — Choose between List or Minimal
+- **Sound effects** — Optional audio feedback when copying
+- **History size** — Control how many clips to keep
 
 ### 🎨 Native macOS Design
-Built with SwiftUI. Looks right at home on Sonoma, Sequoia, and Tahoe.
+Built with SwiftUI. Looks right at home on Sonoma, Sequoia, and Tahoe. Auto-updates via Sparkle.
 
 ---
 
