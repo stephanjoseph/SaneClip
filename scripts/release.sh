@@ -283,6 +283,12 @@ DMG_NAME="${APP_NAME}-${VERSION}"
 DMG_PATH="${BUILD_DIR}/${DMG_NAME}.dmg"
 DMG_BACKGROUND="${PROJECT_ROOT}/scripts/dmg-resources/dmg-background.png"
 
+# Generate DMG background
+log_info "Generating DMG background..."
+if [ -f "${PROJECT_ROOT}/scripts/generate_dmg_background.swift" ]; then
+    swift "${PROJECT_ROOT}/scripts/generate_dmg_background.swift"
+fi
+
 log_info "Creating DMG..."
 
 # Use create-dmg for professional installer appearance
