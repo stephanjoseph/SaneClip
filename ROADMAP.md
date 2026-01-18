@@ -126,7 +126,7 @@
 
 ## Technical Notes
 
-- macOS 14.0+ (Sonoma) — supports M1, M2, M3, M4
+- macOS 14.0+ (Sonoma) — supports M1+
 - Swift 5.9+ with `@Observable`
 - SwiftUI for all UI
 - KeyboardShortcuts package

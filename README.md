@@ -59,7 +59,7 @@ brew install stephanjoseph/saneclip/saneclip
 ## Requirements
 
 - **macOS 14.0** (Sonoma) or later
-- Apple Silicon Mac (M1, M2, M3, M4)
+- Apple Silicon Mac (M1+)
 
 ---
 

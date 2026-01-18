@@ -37,7 +37,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 - **Smoother popover after auth** — Added slight delay for Touch ID dialog to fully dismiss before showing clipboard.
 
 ### Changed
-- **Broader compatibility** — Now supports macOS 14 Sonoma and later (was Sequoia-only). All Apple Silicon Macs supported: M1, M2, M3, M4.
+- **Broader compatibility** — Now supports macOS 14 Sonoma and later (was Sequoia-only). All Apple Silicon Macs supported (M1+).
 - **Updated website** — New saneclip.com with improved Open Graph previews.
 
 ---
