@@ -1,0 +1,58 @@
+# Build logs
+build_log*.txt
+build_output*.txt
+test_output*.txt
+*.log
+
+# Xcode
+*.xcuserstate
+xcuserdata/
+DerivedData/
+.derivedData/
+.swiftpm/
+build_debug/
+build_release/
+*.xcresult/
+*.xccheckout/
+*.xcworkspace/contents.xcworkspacedata
+
+# macOS
+.DS_Store
+
+# Build artifacts
+build/
+.build/
+*.backup*
+vendor/
+.bundle/
+
+# Release artifacts
+releases/
+*.dmg
+*.xcarchive/
+*.pkg
+*.zip
+
+# Claude Code
+.claude/settings.local.json
+.claude/state.json
+.claude/audit.jsonl
+
+# IDE
+.cursor/settings.json
+.vscode/settings.json
+
+# Images in root (keep assets)
+/*.png
+/*.jpg
+!Resources/Assets.xcassets/**/*.png
+
+# Fastlane
+fastlane/keys/
+fastlane/report.xml
+fastlane/test_output/
+
+# Code coverage
+*.gcda
+*.gcno
+TestOutput.xcresult/
