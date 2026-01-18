@@ -291,22 +291,21 @@ fi
 
 log_info "Creating DMG..."
 
-# Use create-dmg for professional installer appearance
-if command -v create-dmg >/dev/null 2>&1 && [ -f "${DMG_BACKGROUND}" ]; then
-    log_info "Using create-dmg with custom background..."
+# Use create-dmg for professional installer appearance (no custom background)
+if command -v create-dmg >/dev/null 2>&1; then
+    log_info "Using create-dmg..."
     create-dmg \
         --volname "${APP_NAME}" \
-        --background "${DMG_BACKGROUND}" \
         --window-pos 200 120 \
-        --window-size 660 400 \
+        --window-size 540 380 \
         --icon-size 128 \
-        --icon "${APP_NAME}.app" 160 220 \
-        --app-drop-link 500 220 \
+        --icon "${APP_NAME}.app" 140 200 \
+        --app-drop-link 400 200 \
         --hide-extension "${APP_NAME}.app" \
         --no-internet-enable \
         "${DMG_PATH}" \
         "${APP_PATH}"
-else
+elif command -v create-dmg >/dev/null 2>&1; then
     # Fallback to basic hdiutil if create-dmg not available
     log_warn "create-dmg not found, using basic DMG creation..."
     DMG_TEMP="${BUILD_DIR}/dmg_temp"

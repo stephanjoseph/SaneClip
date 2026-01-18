@@ -1,6 +1,6 @@
 cask "saneclip" do
   version "1.1"
-  sha256 "ffa501c2137b4d68197b8fc7b0c5661c13bb5cd1e9a0de76bad884df26c57d89"
+  sha256 "35dac44556e600cbf7bcdb418ab78484cf948fef51f16609388aed34a346fe95"
 
   url "https://github.com/stephanjoseph/SaneClip/releases/download/v#{version}/SaneClip-#{version}.dmg"
   name "SaneClip"
