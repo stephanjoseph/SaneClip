@@ -2,6 +2,7 @@
 
 import Cocoa
 import CoreGraphics
+import UniformTypeIdentifiers
 
 // Configuration
 let width = 660
@@ -26,8 +27,8 @@ let context = CGContext(
 context.scaleBy(x: scale, y: scale)
 
 // 1. Fill Background
-// Using a slightly off-white standard macOS window color
-let backgroundColor = NSColor(red: 0.96, green: 0.96, blue: 0.96, alpha: 1.0)
+// Dark Navy matching app icon style (approx #141A2E)
+let backgroundColor = NSColor(red: 0.08, green: 0.10, blue: 0.18, alpha: 1.0)
 context.setFillColor(backgroundColor.cgColor)
 context.fill(CGRect(x: 0, y: 0, width: width, height: height))
 
@@ -37,7 +38,7 @@ let subTitle = "Drag to Applications to install" as NSString
 
 let titleFont = NSFont.systemFont(ofSize: 36, weight: .bold)
 let subTitleFont = NSFont.systemFont(ofSize: 14, weight: .medium)
-let textColor = NSColor(white: 0.2, alpha: 1.0)
+let textColor = NSColor.white
 
 let titleAttributes: [NSAttributedString.Key: Any] = [
     .font: titleFont,
@@ -45,13 +46,16 @@ let titleAttributes: [NSAttributedString.Key: Any] = [
 ]
 let subTitleAttributes: [NSAttributedString.Key: Any] = [
     .font: subTitleFont,
-    .foregroundColor: NSColor(white: 0.5, alpha: 1.0)
+    .foregroundColor: NSColor(white: 0.8, alpha: 1.0)
 ]
 
 let titleSize = title.size(withAttributes: titleAttributes)
 let subTitleSize = subTitle.size(withAttributes: subTitleAttributes)
 
 // Draw Title centered horizontally, near top
+// Add shadow for better contrast/depth
+context.setShadow(offset: CGSize(width: 0, height: -2), blur: 4, color: NSColor.black.withAlphaComponent(0.3).cgColor)
+
 let titleRect = CGRect(
     x: (CGFloat(width) - titleSize.width) / 2.0,
     y: CGFloat(height) - 80, // Top area
@@ -69,12 +73,12 @@ let subTitleRect = CGRect(
 )
 subTitle.draw(in: subTitleRect, withAttributes: subTitleAttributes)
 
+// Reset shadow for other elements if needed, but keeping it for arrow is fine
+// context.setShadow(offset: .zero, blur: 0, color: nil)
+
 // 3. Draw Arrow
 // Positions from release.sh: App (160, 220), Link (500, 220)
-// Warning: CoreGraphics Y is 0 at bottom, but release.sh (create-dmg) uses Y=0 at top.
-// If window height is 400:
-// App Y (from top) = 220  -> Y (from bottom) = 400 - 220 = 180
-// Link Y (from top) = 220 -> Y (from bottom) = 400 - 220 = 180
+// Center Y is 220 from top -> 180 from bottom.
 
 let startX: CGFloat = 210 // Start after App Icon
 let endX: CGFloat = 450   // End before App Drop Link
@@ -85,16 +89,23 @@ arrowPath.move(to: CGPoint(x: startX, y: yPos))
 arrowPath.addLine(to: CGPoint(x: endX, y: yPos))
 
 // Arrow head
-let arrowHeadSize: CGFloat = 10
-arrowPath.move(to: CGPoint(x: endX - arrowHeadSize, y: yPos + arrowHeadSize/2))
+let arrowHeadSize: CGFloat = 12
+arrowPath.move(to: CGPoint(x: endX - arrowHeadSize, y: yPos + arrowHeadSize/2.0))
 arrowPath.addLine(to: CGPoint(x: endX, y: yPos))
-arrowPath.addLine(to: CGPoint(x: endX - arrowHeadSize, y: yPos - arrowHeadSize/2))
+arrowPath.addLine(to: CGPoint(x: endX - arrowHeadSize, y: yPos - arrowHeadSize/2.0))
 
 context.addPath(arrowPath)
-context.setStrokeColor(NSColor(white: 0.7, alpha: 1.0).cgColor)
-context.setLineWidth(2.0)
+
+// Cyan accent color
+let arrowColor = NSColor(red: 0.35, green: 0.70, blue: 0.85, alpha: 1.0)
+context.setStrokeColor(arrowColor.cgColor)
+context.setLineWidth(4.0)
 context.setLineCap(.round)
 context.setLineJoin(.round)
+
+// Add specific shadow for arrow (glow effect)
+context.setShadow(offset: .zero, blur: 8, color: arrowColor.withAlphaComponent(0.5).cgColor)
+
 context.strokePath()
 
 // 4. Save Image
@@ -104,10 +115,10 @@ guard let image = context.makeImage() else {
 }
 
 let destURL = URL(fileURLWithPath: outputPath)
-let destination = CGImageDestinationCreateWithURL(destURL as CFURL, kUTTypePNG, 1, nil)!
+let destination = CGImageDestinationCreateWithURL(destURL as CFURL, UTType.png.identifier as CFString, 1, nil)!
 CGImageDestinationAddImage(destination, image, nil)
 if CGImageDestinationFinalize(destination) {
-    print("Generated DMG background at \(outputPath)")
+    print("Generated premium DMG background at \(outputPath)")
 } else {
     print("Failed to save image")
     exit(1)
