@@ -82,12 +82,25 @@ class SaneClipAppDelegate: NSObject, NSApplicationDelegate {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
         if let button = statusItem.button {
-            // Use SF Symbol - guaranteed to work perfectly in menu bar
-            button.image = NSImage(systemSymbolName: "clipboard.fill", accessibilityDescription: "SaneClip")
+            // Use SF Symbol from settings
+            let iconName = SettingsModel.shared.menuBarIcon
+            button.image = NSImage(systemSymbolName: iconName, accessibilityDescription: "SaneClip")
             button.action = #selector(togglePopover)
             button.target = self
             // Right-click menu
             button.sendAction(on: [.leftMouseUp, .rightMouseUp])
+        }
+
+        // Listen for icon changes
+        NotificationCenter.default.addObserver(
+            forName: .menuBarIconChanged,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            if let iconName = notification.object as? String,
+               let button = self?.statusItem.button {
+                button.image = NSImage(systemSymbolName: iconName, accessibilityDescription: "SaneClip")
+            }
         }
 
         // Create right-click context menu
@@ -113,6 +126,26 @@ class SaneClipAppDelegate: NSObject, NSApplicationDelegate {
         setupKeyboardShortcuts()
 
         appLogger.info("SaneClip ready")
+
+        // Show onboarding on first launch
+        if !UserDefaults.standard.bool(forKey: "hasCompletedOnboarding") {
+            showOnboarding()
+        }
+    }
+
+    private func showOnboarding() {
+        let onboardingView = OnboardingView()
+        let hostingController = NSHostingController(rootView: onboardingView)
+
+        let window = NSWindow(contentViewController: hostingController)
+        window.title = "Welcome to SaneClip"
+        window.styleMask = [.titled, .closable]
+        window.setContentSize(NSSize(width: 700, height: 480))
+        window.center()
+        window.isReleasedWhenClosed = false
+
+        window.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
     }
 
     private func setupKeyboardShortcuts() {
@@ -374,15 +407,34 @@ class ClipboardManager {
             logger.debug("Removed quick-cleared item (likely password)")
         }
 
+        // Get source app info
+        let frontmostApp = NSWorkspace.shared.frontmostApplication
+        let sourceAppBundleID = frontmostApp?.bundleIdentifier
+        let sourceAppName = frontmostApp?.localizedName
+
+        // Skip excluded apps
+        if SettingsModel.shared.isAppExcluded(sourceAppBundleID) {
+            logger.debug("Skipping clipboard from excluded app: \(sourceAppName ?? "unknown")")
+            return
+        }
+
         // Get clipboard content
         if let string = pasteboard.string(forType: .string), !string.isEmpty {
             lastClipboardContent = string
             lastCopyTime = Date()
-            addItem(ClipboardItem(content: .text(string)))
+            addItem(ClipboardItem(
+                content: .text(string),
+                sourceAppBundleID: sourceAppBundleID,
+                sourceAppName: sourceAppName
+            ))
         } else if let image = NSImage(pasteboard: pasteboard) {
             lastClipboardContent = nil
             lastCopyTime = nil
-            addItem(ClipboardItem(content: .image(image)))
+            addItem(ClipboardItem(
+                content: .image(image),
+                sourceAppBundleID: sourceAppBundleID,
+                sourceAppName: sourceAppName
+            ))
         } else {
             // Clipboard was cleared
             lastClipboardContent = nil
@@ -424,14 +476,18 @@ class ClipboardManager {
             }
         }
 
-        // Move to front
+        // Move to front and increment paste count
         if let index = history.firstIndex(where: { $0.id == item.id }) {
-            let item = history.remove(at: index)
-            history.insert(item, at: 0)
+            var updatedItem = history.remove(at: index)
+            updatedItem.pasteCount += 1
+            history.insert(updatedItem, at: 0)
+            saveHistory()
         }
 
-        // Play a short, sweet click sound
-        NSSound(named: .init("Tink"))?.play()
+        // Play a subtle sound (if enabled)
+        if SettingsModel.shared.playSounds {
+            NSSound(named: .init("Pop"))?.play()
+        }
 
         // Simulate Cmd+V with longer delay to let popover close
         Task { @MainActor in
@@ -504,7 +560,14 @@ class ClipboardManager {
         // Only save text items (images are too large)
         let textItems = history.compactMap { item -> SavedClipboardItem? in
             if case .text(let string) = item.content {
-                return SavedClipboardItem(id: item.id, text: string, timestamp: item.timestamp)
+                return SavedClipboardItem(
+                    id: item.id,
+                    text: string,
+                    timestamp: item.timestamp,
+                    sourceAppBundleID: item.sourceAppBundleID,
+                    sourceAppName: item.sourceAppName,
+                    pasteCount: item.pasteCount
+                )
             }
             return nil
         }
@@ -523,7 +586,16 @@ class ClipboardManager {
         do {
             let data = try Data(contentsOf: historyFileURL)
             let items = try JSONDecoder().decode([SavedClipboardItem].self, from: data)
-            history = items.map { ClipboardItem(id: $0.id, content: .text($0.text), timestamp: $0.timestamp) }
+            history = items.map {
+                ClipboardItem(
+                    id: $0.id,
+                    content: .text($0.text),
+                    timestamp: $0.timestamp,
+                    sourceAppBundleID: $0.sourceAppBundleID,
+                    sourceAppName: $0.sourceAppName,
+                    pasteCount: $0.pasteCount
+                )
+            }
         } catch {
             logger.error("Failed to load history: \(error.localizedDescription)")
         }
@@ -536,11 +608,33 @@ struct ClipboardItem: Identifiable {
     let id: UUID
     let content: ClipboardContent
     let timestamp: Date
+    let sourceAppBundleID: String?
+    let sourceAppName: String?
+    var pasteCount: Int
 
-    init(id: UUID = UUID(), content: ClipboardContent, timestamp: Date = Date()) {
+    init(
+        id: UUID = UUID(),
+        content: ClipboardContent,
+        timestamp: Date = Date(),
+        sourceAppBundleID: String? = nil,
+        sourceAppName: String? = nil,
+        pasteCount: Int = 0
+    ) {
         self.id = id
         self.content = content
         self.timestamp = timestamp
+        self.sourceAppBundleID = sourceAppBundleID
+        self.sourceAppName = sourceAppName
+        self.pasteCount = pasteCount
+    }
+
+    /// Get the app icon for the source app
+    var sourceAppIcon: NSImage? {
+        guard let bundleID = sourceAppBundleID,
+              let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) else {
+            return nil
+        }
+        return NSWorkspace.shared.icon(forFile: appURL.path)
     }
 
     var contentHash: String {
@@ -568,13 +662,31 @@ struct ClipboardItem: Identifiable {
     var stats: String {
         switch content {
         case .text(let string):
-            let chars = string.count
             let words = string.split { $0.isWhitespace || $0.isNewline }.count
-            return "\(chars) chars · \(words) words"
+            let chars = string.count
+            return "\(words)w · \(chars)c"
         case .image(let image):
             let size = image.size
             return "\(Int(size.width))×\(Int(size.height))"
         }
+    }
+
+    /// Compact time ago string with smart scaling
+    var timeAgo: String {
+        let seconds = Int(-timestamp.timeIntervalSinceNow)
+        if seconds < 60 {
+            return "\(seconds)s"
+        }
+        let minutes = seconds / 60
+        if minutes < 60 {
+            return "\(minutes)m"
+        }
+        let hours = minutes / 60
+        if hours < 24 {
+            return "\(hours)h"
+        }
+        let days = hours / 24
+        return "\(days)d"
     }
 }
 
@@ -587,6 +699,36 @@ struct SavedClipboardItem: Codable {
     let id: UUID
     let text: String
     let timestamp: Date
+    let sourceAppBundleID: String?
+    let sourceAppName: String?
+    let pasteCount: Int
+
+    init(
+        id: UUID,
+        text: String,
+        timestamp: Date,
+        sourceAppBundleID: String? = nil,
+        sourceAppName: String? = nil,
+        pasteCount: Int = 0
+    ) {
+        self.id = id
+        self.text = text
+        self.timestamp = timestamp
+        self.sourceAppBundleID = sourceAppBundleID
+        self.sourceAppName = sourceAppName
+        self.pasteCount = pasteCount
+    }
+
+    // Custom decoder for backward compatibility with old history files
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(UUID.self, forKey: .id)
+        text = try container.decode(String.self, forKey: .text)
+        timestamp = try container.decode(Date.self, forKey: .timestamp)
+        sourceAppBundleID = try container.decodeIfPresent(String.self, forKey: .sourceAppBundleID)
+        sourceAppName = try container.decodeIfPresent(String.self, forKey: .sourceAppName)
+        pasteCount = try container.decodeIfPresent(Int.self, forKey: .pasteCount) ?? 0
+    }
 }
 
 // MARK: - Clipboard History View
@@ -594,6 +736,13 @@ struct SavedClipboardItem: Codable {
 struct ClipboardHistoryView: View {
     let clipboardManager: ClipboardManager
     @State private var searchText = ""
+    @State private var selectedIndex: Int = 0
+    @FocusState private var isListFocused: Bool
+
+    /// All navigable items (pinned + history)
+    var allItems: [ClipboardItem] {
+        filteredPinned + filteredHistory
+    }
 
     var filteredHistory: [ClipboardItem] {
         let items = searchText.isEmpty ? clipboardManager.history : clipboardManager.history.filter { item in
@@ -651,8 +800,13 @@ struct ClipboardHistoryView: View {
                     // Pinned section
                     if !filteredPinned.isEmpty {
                         Section("Pinned") {
-                            ForEach(filteredPinned) { item in
-                                ClipboardItemRow(item: item, isPinned: true, clipboardManager: clipboardManager)
+                            ForEach(Array(filteredPinned.enumerated()), id: \.element.id) { index, item in
+                                ClipboardItemRow(
+                                    item: item,
+                                    isPinned: true,
+                                    clipboardManager: clipboardManager,
+                                    isSelected: index == selectedIndex
+                                )
                             }
                         }
                     }
@@ -660,16 +814,24 @@ struct ClipboardHistoryView: View {
                     // Recent section
                     Section(filteredPinned.isEmpty ? "" : "Recent") {
                         ForEach(Array(filteredHistory.enumerated()), id: \.element.id) { index, item in
+                            let globalIndex = filteredPinned.count + index
                             ClipboardItemRow(
                                 item: item,
                                 isPinned: false,
                                 clipboardManager: clipboardManager,
-                                shortcutHint: index < 9 ? "⌘⌃\(index + 1)" : nil
+                                shortcutHint: index < 9 ? "⌘⌃\(index + 1)" : nil,
+                                isSelected: globalIndex == selectedIndex
                             )
                         }
                     }
                 }
                 .listStyle(.plain)
+                .focused($isListFocused)
+                .onKeyPress(.downArrow) { moveSelection(by: 1); return .handled }
+                .onKeyPress(.upArrow) { moveSelection(by: -1); return .handled }
+                .onKeyPress(characters: CharacterSet(charactersIn: "jJ")) { _ in moveSelection(by: 1); return .handled }
+                .onKeyPress(characters: CharacterSet(charactersIn: "kK")) { _ in moveSelection(by: -1); return .handled }
+                .onKeyPress(.return) { pasteSelectedItem(); return .handled }
             }
 
             Divider()
@@ -697,6 +859,22 @@ struct ClipboardHistoryView: View {
             }
             .padding(8)
         }
+        .onAppear {
+            selectedIndex = 0
+            isListFocused = true
+        }
+    }
+
+    private func moveSelection(by offset: Int) {
+        let itemCount = allItems.count
+        guard itemCount > 0 else { return }
+        selectedIndex = max(0, min(itemCount - 1, selectedIndex + offset))
+    }
+
+    private func pasteSelectedItem() {
+        guard selectedIndex >= 0 && selectedIndex < allItems.count else { return }
+        let item = allItems[selectedIndex]
+        clipboardManager.paste(item: item)
     }
 }
 
@@ -705,6 +883,7 @@ struct ClipboardItemRow: View {
     let isPinned: Bool
     let clipboardManager: ClipboardManager
     var shortcutHint: String? = nil
+    var isSelected: Bool = false
     @Environment(\.colorScheme) private var colorScheme
 
     private var accentColor: Color {
@@ -714,7 +893,12 @@ struct ClipboardItemRow: View {
     }
 
     private var cardBackground: Color {
-        colorScheme == .dark
+        if isSelected {
+            return colorScheme == .dark
+                ? Color.accentColor.opacity(0.25)
+                : Color.accentColor.opacity(0.15)
+        }
+        return colorScheme == .dark
             ? Color.white.opacity(0.06)
             : Color.black.opacity(0.03)
     }
@@ -726,34 +910,55 @@ struct ClipboardItemRow: View {
                 .fill(accentColor)
                 .frame(width: 3)
 
-            HStack(spacing: 8) {
+            HStack(alignment: .top, spacing: 8) {
                 // Pin indicator
                 if isPinned {
                     Image(systemName: "pin.fill")
                         .font(.caption2)
                         .foregroundStyle(.orange)
+                        .padding(.top, 2)
                 }
 
                 // Content & metadata stacked
-                VStack(alignment: .leading, spacing: 3) {
+                VStack(alignment: .leading, spacing: 6) {
                     Text(item.preview)
                         .lineLimit(2)
                         .font(.system(.callout, weight: .medium))
                         .foregroundStyle(.primary)
 
-                    // Compact metadata inline
-                    HStack(spacing: 6) {
+                    // Metadata line - fixed columns for alignment
+                    HStack(spacing: 0) {
+                        // Source app icon
+                        if let icon = item.sourceAppIcon {
+                            Image(nsImage: icon)
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                                .help(item.sourceAppName ?? "Unknown app")
+                                .padding(.trailing, 8)
+                        }
+
                         Text(item.stats)
                             .font(.caption)
                             .foregroundStyle(.primary.opacity(0.85))
+                            .frame(minWidth: 75, alignment: .leading)
 
-                        Text("·")
+                        Text(item.timeAgo)
                             .font(.caption)
-                            .foregroundStyle(.primary.opacity(0.5))
+                            .foregroundStyle(.primary.opacity(0.6))
+                            .frame(minWidth: 28, alignment: .leading)
 
-                        Text(item.timestamp, style: .relative)
-                            .font(.caption)
-                            .foregroundStyle(.primary.opacity(0.85))
+                        // Paste count badge
+                        if item.pasteCount > 0 {
+                            HStack(spacing: 2) {
+                                Image(systemName: "doc.on.doc")
+                                    .font(.system(size: 9))
+                                Text("\(item.pasteCount)")
+                                    .font(.caption2)
+                            }
+                            .foregroundStyle(.green.opacity(0.8))
+                            .frame(minWidth: 30, alignment: .leading)
+                            .help("Pasted \(item.pasteCount) time\(item.pasteCount == 1 ? "" : "s")")
+                        }
 
                         if let hint = shortcutHint {
                             Spacer()
@@ -762,22 +967,24 @@ struct ClipboardItemRow: View {
                                 .foregroundStyle(.primary.opacity(0.55))
                         }
                     }
+                    .lineLimit(1)
                 }
 
                 Spacer(minLength: 4)
 
-                // Paste button - dramatic press feedback
+                // Paste button - aligned with preview text
                 Button(action: { clipboardManager.paste(item: item) }) {
                     Image(systemName: "doc.on.doc.fill")
                         .font(.system(size: 18))
                         .foregroundStyle(accentColor)
                 }
                 .buttonStyle(PasteButtonStyle(accentColor: accentColor))
-                .help("Paste")
+                .help("Copy & Paste")
+                .padding(.top, 2)
             }
-            .padding(.vertical, 6)
+            .padding(.vertical, 10)
             .padding(.leading, 10)
-            .padding(.trailing, 6)
+            .padding(.trailing, 8)
         }
         .background(
             RoundedRectangle(cornerRadius: 10)

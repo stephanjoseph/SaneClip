@@ -3,6 +3,12 @@ import KeyboardShortcuts
 import ServiceManagement
 import LocalAuthentication
 
+// MARK: - Notifications
+
+extension Notification.Name {
+    static let menuBarIconChanged = Notification.Name("menuBarIconChanged")
+}
+
 // MARK: - Settings Model
 
 @MainActor
@@ -35,11 +41,48 @@ class SettingsModel {
         }
     }
 
+    var excludedApps: [String] {
+        didSet {
+            UserDefaults.standard.set(excludedApps, forKey: "excludedApps")
+        }
+    }
+
+    var playSounds: Bool {
+        didSet {
+            UserDefaults.standard.set(playSounds, forKey: "playSounds")
+        }
+    }
+
+    var menuBarIcon: String {
+        didSet {
+            UserDefaults.standard.set(menuBarIcon, forKey: "menuBarIcon")
+            NotificationCenter.default.post(name: .menuBarIconChanged, object: menuBarIcon)
+        }
+    }
+
+    func isAppExcluded(_ bundleID: String?) -> Bool {
+        guard let bundleID = bundleID else { return false }
+        return excludedApps.contains(bundleID)
+    }
+
+    func addExcludedApp(_ bundleID: String) {
+        if !excludedApps.contains(bundleID) {
+            excludedApps.append(bundleID)
+        }
+    }
+
+    func removeExcludedApp(_ bundleID: String) {
+        excludedApps.removeAll { $0 == bundleID }
+    }
+
     init() {
         self.maxHistorySize = UserDefaults.standard.object(forKey: "maxHistorySize") as? Int ?? 50
         self.showInDock = UserDefaults.standard.object(forKey: "showInDock") as? Bool ?? true
         self.protectPasswords = UserDefaults.standard.object(forKey: "protectPasswords") as? Bool ?? true
         self.requireTouchID = UserDefaults.standard.object(forKey: "requireTouchID") as? Bool ?? false
+        self.excludedApps = UserDefaults.standard.object(forKey: "excludedApps") as? [String] ?? []
+        self.playSounds = UserDefaults.standard.object(forKey: "playSounds") as? Bool ?? false
+        self.menuBarIcon = UserDefaults.standard.object(forKey: "menuBarIcon") as? String ?? "list.clipboard.fill"
         applyDockVisibility()
     }
 
@@ -141,14 +184,84 @@ struct GeneralSettingsView: View {
                     ))
                 }
 
-                CompactSection("Updates") {
-                    CompactToggle(label: "Automatically check for updates", isOn: Binding(
+                CompactSection("Appearance") {
+                    CompactRow("Menu Bar Icon") {
+                        Picker("", selection: Binding(
+                            get: { settings.menuBarIcon },
+                            set: { settings.menuBarIcon = $0 }
+                        )) {
+                            Label("List", systemImage: "list.clipboard.fill").tag("list.clipboard.fill")
+                            Label("Minimal", systemImage: "doc.plaintext").tag("doc.plaintext")
+                        }
+                        .pickerStyle(.menu)
+                        .frame(width: 140)
+                    }
+                    CompactDivider()
+                    CompactToggle(label: "Play sounds", isOn: Binding(
+                        get: { settings.playSounds },
+                        set: { settings.playSounds = $0 }
+                    ))
+                }
+
+                CompactSection("Security") {
+                    CompactToggle(label: "Protect passwords (auto-clear)", isOn: Binding(
+                        get: { settings.protectPasswords },
+                        set: { newValue in
+                            if newValue {
+                                // Turning ON - no auth needed
+                                settings.protectPasswords = true
+                            } else {
+                                // Turning OFF - always requires auth
+                                authenticateForSecurityChange(reason: "Authenticate to disable password protection") {
+                                    settings.protectPasswords = false
+                                }
+                            }
+                        }
+                    ))
+                    .disabled(isAuthenticating)
+                    CompactDivider()
+                    CompactToggle(label: "Require Touch ID to view history", isOn: Binding(
+                        get: { settings.requireTouchID },
+                        set: { newValue in
+                            if newValue {
+                                // Turning ON - no auth needed
+                                settings.requireTouchID = true
+                            } else {
+                                // Turning OFF - always requires auth
+                                authenticateForSecurityChange(reason: "Authenticate to disable Touch ID protection") {
+                                    settings.requireTouchID = false
+                                }
+                            }
+                        }
+                    ))
+                    .disabled(isAuthenticating)
+                    CompactDivider()
+                    ExcludedAppsInline(
+                        excludedApps: Binding(
+                            get: { settings.excludedApps },
+                            set: { settings.excludedApps = $0 }
+                        ),
+                        requireAuthForRemoval: true,
+                        authenticate: authenticateForSecurityChange
+                    )
+                }
+
+                CompactSection("Software Updates") {
+                    CompactToggle(label: "Check for updates automatically", isOn: Binding(
                         get: { autoCheckUpdates },
                         set: { newValue in
                             autoCheckUpdates = newValue
                             UpdateService.shared.automaticallyChecksForUpdates = newValue
                         }
                     ))
+                    CompactDivider()
+                    CompactRow("Actions") {
+                        Button("Check Now") {
+                            UpdateService.shared.checkForUpdates()
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                    }
                 }
 
                 CompactSection("History") {
@@ -165,32 +278,10 @@ struct GeneralSettingsView: View {
                         .pickerStyle(.menu)
                         .frame(width: 80)
                     }
-                }
-
-                CompactSection("Privacy") {
-                    CompactToggle(label: "Protect passwords (auto-clear)", isOn: Binding(
-                        get: { settings.protectPasswords },
-                        set: { settings.protectPasswords = $0 }
-                    ))
                     CompactDivider()
-                    CompactToggle(label: "Require Touch ID to view history", isOn: Binding(
-                        get: { settings.requireTouchID },
-                        set: { newValue in
-                            if newValue {
-                                // Turning ON - no auth needed
-                                settings.requireTouchID = true
-                            } else {
-                                // Turning OFF - requires Touch ID first
-                                authenticateToDisableTouchID()
-                            }
-                        }
-                    ))
-                    .disabled(isAuthenticating)
-                }
-
-                CompactSection("Storage") {
-                    CompactRow("Location") {
+                    CompactRow("Storage") {
                         Text("~/Library/Application Support/SaneClip/")
+                            .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                 }
@@ -221,7 +312,7 @@ struct GeneralSettingsView: View {
         launchAtLogin = (status == .enabled)
     }
 
-    private func authenticateToDisableTouchID() {
+    private func authenticateForSecurityChange(reason: String, onSuccess: @escaping () -> Void) {
         isAuthenticating = true
         let context = LAContext()
         var error: NSError?
@@ -233,15 +324,146 @@ struct GeneralSettingsView: View {
 
         context.evaluatePolicy(
             policy,
-            localizedReason: "Authenticate to disable Touch ID protection"
+            localizedReason: reason
         ) { success, _ in
             DispatchQueue.main.async {
                 if success {
-                    settings.requireTouchID = false
+                    onSuccess()
                 }
                 isAuthenticating = false
             }
         }
+    }
+}
+
+// MARK: - Excluded Apps (Row-based, matches design language)
+
+struct ExcludedAppsInline: View {
+    @Binding var excludedApps: [String]
+    var requireAuthForRemoval: Bool = false
+    var authenticate: ((String, @escaping () -> Void) -> Void)?
+
+    var body: some View {
+        VStack(spacing: 0) {
+            // Header row
+            HStack {
+                Text("Excluded Apps")
+                Spacer()
+                Button("Add App...") {
+                    browseForApp()
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+
+            // Subtitle
+            if excludedApps.isEmpty {
+                HStack {
+                    Text("No apps excluded. Clips from all apps will be saved.")
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                }
+                .padding(.horizontal, 12)
+                .padding(.bottom, 10)
+            } else {
+                HStack {
+                    Text("Clips from these apps won't be saved:")
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                    Spacer()
+                }
+                .padding(.horizontal, 12)
+                .padding(.bottom, 6)
+
+                // App rows
+                ForEach(excludedApps, id: \.self) { bundleID in
+                    CompactDivider()
+                    ExcludedAppRow(bundleID: bundleID) {
+                        removeApp(bundleID)
+                    }
+                }
+            }
+        }
+    }
+
+    private func removeApp(_ bundleID: String) {
+        if requireAuthForRemoval, let authenticate = authenticate {
+            authenticate("Authenticate to remove app from exclusion list") {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    excludedApps.removeAll { $0 == bundleID }
+                }
+            }
+        } else {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                excludedApps.removeAll { $0 == bundleID }
+            }
+        }
+    }
+
+    private func browseForApp() {
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = [.application]
+        panel.allowsMultipleSelection = false
+        panel.canChooseDirectories = false
+        panel.directoryURL = URL(fileURLWithPath: "/Applications")
+        panel.message = "Select an app to exclude from clipboard history"
+
+        if panel.runModal() == .OK, let url = panel.url {
+            if let bundle = Bundle(url: url),
+               let bundleID = bundle.bundleIdentifier {
+                if !excludedApps.contains(bundleID) {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        excludedApps.append(bundleID)
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - Excluded App Row
+
+struct ExcludedAppRow: View {
+    let bundleID: String
+    let onRemove: () -> Void
+    @State private var isHovering = false
+
+    private var appName: String {
+        guard let appURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: bundleID) else {
+            return bundleID.components(separatedBy: ".").last ?? bundleID
+        }
+        if let bundle = Bundle(url: appURL) {
+            if let name = bundle.infoDictionary?["CFBundleDisplayName"] as? String {
+                return name
+            }
+            if let name = bundle.infoDictionary?["CFBundleName"] as? String {
+                return name
+            }
+        }
+        return appURL.deletingPathExtension().lastPathComponent
+    }
+
+    var body: some View {
+        HStack {
+            Text(appName)
+
+            Spacer()
+
+            Button {
+                onRemove()
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .foregroundStyle(isHovering ? .primary : .secondary)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+        .contentShape(Rectangle())
+        .onHover { isHovering = $0 }
     }
 }
 

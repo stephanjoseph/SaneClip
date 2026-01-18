@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		16655899F3DCE31870294A4E /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A38E2A21BA972E3A759E7CE /* OnboardingView.swift */; };
 		31AE3F98F164FB0ECD0829BD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E5B3959F17D55FF5C7F90E6 /* Assets.xcassets */; };
 		5ED4D24BD177013CA44D2963 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B74750429D17786620EF008E /* main.swift */; };
 		60E0917C7EE6C533E0E339D6 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0713E5848E1A9394B7528D /* SettingsView.swift */; };
@@ -28,6 +29,7 @@
 
 /* Begin PBXFileReference section */
 		14D0EBBF195245B8CE7ECF07 /* SaneClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SaneClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2A38E2A21BA972E3A759E7CE /* OnboardingView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = OnboardingView.swift; path = Onboarding/OnboardingView.swift; sourceTree = "<group>"; };
 		6E0713E5848E1A9394B7528D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		6E5B3959F17D55FF5C7F90E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		71B639CB4375AE4479924B74 /* SaneClipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaneClipTests.swift; sourceTree = "<group>"; };
@@ -62,6 +64,14 @@
 				6E5B3959F17D55FF5C7F90E6 /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		33D9D3AD58728FB2C8DE1F42 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				2A38E2A21BA972E3A759E7CE /* OnboardingView.swift */,
+			);
+			name = Onboarding;
 			sourceTree = "<group>";
 		};
 		421E2940F20104B95C6C67C8 = {
@@ -106,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				A8D8AAF79390D8CCEB64615E /* Settings */,
+				33D9D3AD58728FB2C8DE1F42 /* Onboarding */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -125,8 +136,6 @@
 				28593D0BF33B35DB0396AA70 /* PBXTargetDependency */,
 			);
 			name = SaneClipTests;
-			packageProductDependencies = (
-			);
 			productName = SaneClipTests;
 			productReference = 7C13160E8B6EC2A2DB6B0BB5 /* SaneClipTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -187,6 +196,7 @@
 				9B9B0D09FDAE079B73A7A0CB /* XCRemoteSwiftPackageReference "Sparkle" */,
 			);
 			preferredProjectObjectVersion = 77;
+			productRefGroup = 4526C796D072235F7CAE5FCD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -245,6 +255,7 @@
 				B3761DF4123417A5EA8C0DF3 /* SaneClipApp.swift in Sources */,
 				60E0917C7EE6C533E0E339D6 /* SettingsView.swift in Sources */,
 				5ED4D24BD177013CA44D2963 /* main.swift in Sources */,
+				16655899F3DCE31870294A4E /* OnboardingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

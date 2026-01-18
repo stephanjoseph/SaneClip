@@ -27,4 +27,42 @@ struct SaneClipTests {
 
         #expect(item1.contentHash == item2.contentHash)
     }
+
+    @Test("ClipboardItem stores source app info")
+    func clipboardItemSourceApp() {
+        let item = ClipboardItem(
+            content: .text("Test"),
+            sourceAppBundleID: "com.apple.Safari",
+            sourceAppName: "Safari"
+        )
+
+        #expect(item.sourceAppBundleID == "com.apple.Safari")
+        #expect(item.sourceAppName == "Safari")
+    }
+
+    @Test("ClipboardItem source app info is optional")
+    func clipboardItemSourceAppOptional() {
+        let item = ClipboardItem(content: .text("Test"))
+
+        #expect(item.sourceAppBundleID == nil)
+        #expect(item.sourceAppName == nil)
+    }
+
+    @Test("SettingsModel excludes apps correctly")
+    @MainActor
+    func settingsModelExcludedApps() {
+        let settings = SettingsModel.shared
+
+        // Save original state
+        let originalExcluded = settings.excludedApps
+
+        // Test excluding an app
+        settings.excludedApps = ["com.test.app"]
+        #expect(settings.isAppExcluded("com.test.app") == true)
+        #expect(settings.isAppExcluded("com.other.app") == false)
+        #expect(settings.isAppExcluded(nil) == false)
+
+        // Restore original state
+        settings.excludedApps = originalExcluded
+    }
 }

@@ -25,17 +25,18 @@
 
 *Target: 2-3 weeks*
 
-### Quick Wins
-- [ ] **App source attribution** — Show which app each clip came from with icon
-- [ ] **Exclude apps list** — Blacklist sensitive apps (1Password, banking, etc.)
-- [ ] **Duplicate detection** — Auto-consolidate identical clips
-- [ ] **Keyboard navigation** — Arrow keys, vim-style j/k in history list
-- [ ] **Paste count badge** — Show how many times each item was pasted
+### ✅ Quick Wins (Complete)
+- [x] **App source attribution** — Show which app each clip came from with icon
+- [x] **Exclude apps list** — Blacklist sensitive apps (1Password, banking, etc.)
+- [x] **Duplicate detection** — Auto-consolidate identical clips
+- [x] **Keyboard navigation** — Arrow keys, vim-style j/k in history list
+- [x] **Paste count badge** — Show how many times each item was pasted
+- [x] **Security-by-default** — Auth required to reduce any security setting
 
-### Polish
-- [ ] **Improved onboarding** — First-launch tutorial
-- [ ] **Menu bar icon options** — Multiple icon styles
-- [ ] **Sound effects toggle** — Option to disable paste sounds
+### ✅ Polish (Complete)
+- [x] **Improved onboarding** — First-launch tutorial
+- [x] **Menu bar icon options** — List and Minimal styles
+- [x] **Sound effects toggle** — Opt-in paste sounds
 
 ---
 
