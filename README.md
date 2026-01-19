@@ -36,9 +36,10 @@ Keep frequently-used text always accessible. Pinned items never expire.
 Filter your entire clipboard history as you type.
 
 ### 🛡️ Privacy & Security
-- **Password detection** — Automatically skips quick-cleared items (like from 1Password)
+- **Password protection** — Detects transient clipboard types (1Password, Dashlane, etc.) and blocks them
 - **Excluded apps** — Block sensitive apps from clipboard capture entirely
 - **Touch ID** — Require authentication to view history
+- **Encrypted storage** — History file uses macOS file protection
 
 ### 📱 App Source Attribution
 See which app each clip came from with its icon. Know if that text came from Slack, VS Code, or Safari.
@@ -55,6 +56,9 @@ See which app each clip came from with its icon. Know if that text came from Sla
 
 ### 🎨 Native macOS Design
 Built with SwiftUI. Looks right at home on Sonoma, Sequoia, and Tahoe. Auto-updates via Sparkle.
+
+### 🖱️ Click to Paste
+Single-click any item to paste instantly. Right-click for more options (Pin, Delete, Paste as Plain Text).
 
 ---
 
