@@ -29,9 +29,6 @@ vendor/
 # Release artifacts
 releases/
 *.dmg
-# Allow docs/releases for GitHub Pages hosting
-!docs/releases/
-!docs/releases/*.dmg
 *.xcarchive/
 *.pkg
 *.zip
