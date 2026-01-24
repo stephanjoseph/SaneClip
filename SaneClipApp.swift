@@ -41,6 +41,7 @@ class UpdateService: NSObject, ObservableObject {
 extension KeyboardShortcuts.Name {
     static let showClipboardHistory = Self("showClipboardHistory")
     static let pasteAsPlainText = Self("pasteAsPlainText")
+    static let pasteFromStack = Self("pasteFromStack")
     // Quick paste shortcuts for items 1-9
     static let pasteItem1 = Self("pasteItem1")
     static let pasteItem2 = Self("pasteItem2")
@@ -62,10 +63,17 @@ class SaneClipAppDelegate: NSObject, NSApplicationDelegate {
     private var clipboardManager: ClipboardManager!
     private var updateService: UpdateService!
     private var onboardingWindow: NSWindow?
+    nonisolated(unsafe) private var menuBarIconObserver: NSObjectProtocol?
 
     /// Track when user last authenticated with Touch ID (grace period)
     private var lastAuthenticationTime: Date?
     private let authGracePeriod: TimeInterval = 30.0  // seconds - stays unlocked for 30s
+
+    deinit {
+        if let observer = menuBarIconObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+    }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         appLogger.info("SaneClip starting...")
@@ -78,6 +86,7 @@ class SaneClipAppDelegate: NSObject, NSApplicationDelegate {
 
         // Initialize clipboard manager
         clipboardManager = ClipboardManager()
+        ClipboardManager.shared = clipboardManager
 
         // Create status bar item
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
@@ -93,7 +102,7 @@ class SaneClipAppDelegate: NSObject, NSApplicationDelegate {
         }
 
         // Listen for icon changes
-        NotificationCenter.default.addObserver(
+        menuBarIconObserver = NotificationCenter.default.addObserver(
             forName: .menuBarIconChanged,
             object: nil,
             queue: .main
@@ -112,7 +121,9 @@ class SaneClipAppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Settings...", action: #selector(openSettings), keyEquivalent: ","))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Quit SaneClip", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        let quitItem = NSMenuItem(
+            title: "Quit SaneClip", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        menu.addItem(quitItem)
         statusItem.menu = nil // We'll show it manually on right-click
 
         // Create popover
@@ -168,6 +179,12 @@ class SaneClipAppDelegate: NSObject, NSApplicationDelegate {
             }
         }
 
+        KeyboardShortcuts.onKeyUp(for: .pasteFromStack) { [weak self] in
+            Task { @MainActor in
+                self?.clipboardManager.pasteFromStack()
+            }
+        }
+
         // Quick paste shortcuts 1-9
         let shortcuts: [KeyboardShortcuts.Name] = [
             .pasteItem1, .pasteItem2, .pasteItem3, .pasteItem4, .pasteItem5,
@@ -195,16 +212,20 @@ class SaneClipAppDelegate: NSObject, NSApplicationDelegate {
             appLogger.info("Set default shortcut: Cmd+Shift+Option+V for paste as plain text")
         }
 
+        // Paste from stack: Cmd+Ctrl+V
+        if KeyboardShortcuts.getShortcut(for: .pasteFromStack) == nil {
+            KeyboardShortcuts.setShortcut(.init(.v, modifiers: [.command, .control]), for: .pasteFromStack)
+            appLogger.info("Set default shortcut: Cmd+Ctrl+V for paste from stack")
+        }
+
         // Quick paste shortcuts: Cmd+Ctrl+1 through 9
         let keys: [KeyboardShortcuts.Key] = [.one, .two, .three, .four, .five, .six, .seven, .eight, .nine]
         let shortcuts: [KeyboardShortcuts.Name] = [
             .pasteItem1, .pasteItem2, .pasteItem3, .pasteItem4, .pasteItem5,
             .pasteItem6, .pasteItem7, .pasteItem8, .pasteItem9
         ]
-        for (key, shortcut) in zip(keys, shortcuts) {
-            if KeyboardShortcuts.getShortcut(for: shortcut) == nil {
-                KeyboardShortcuts.setShortcut(.init(key, modifiers: [.command, .control]), for: shortcut)
-            }
+        for (key, shortcut) in zip(keys, shortcuts) where KeyboardShortcuts.getShortcut(for: shortcut) == nil {
+            KeyboardShortcuts.setShortcut(.init(key, modifiers: [.command, .control]), for: shortcut)
         }
     }
 
@@ -323,7 +344,9 @@ class SaneClipAppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Settings...", action: #selector(openSettings), keyEquivalent: ","))
         menu.addItem(NSMenuItem.separator())
-        menu.addItem(NSMenuItem(title: "Quit SaneClip", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
+        let quit = NSMenuItem(
+            title: "Quit SaneClip", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        menu.addItem(quit)
 
         statusItem.menu = menu
         button.performClick(nil)
@@ -359,5 +382,3 @@ class SaneClipAppDelegate: NSObject, NSApplicationDelegate {
         clipboardManager.pasteItemAt(index: index)
     }
 }
-
-

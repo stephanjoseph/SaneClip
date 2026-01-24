@@ -4,15 +4,51 @@ struct ClipboardItemRow: View {
     let item: ClipboardItem
     let isPinned: Bool
     let clipboardManager: ClipboardManager
-    var shortcutHint: String? = nil
+    var shortcutHint: String?
     var isSelected: Bool = false
     @Environment(\.colorScheme) private var colorScheme
     @State private var isHovering = false
+    @State private var showEditSheet = false
+    @State private var editText = ""
+
+    // MARK: - Accessibility
+
+    private var accessibilityDescription: String {
+        var parts: [String] = []
+
+        // Content type and preview
+        if case .image = item.content {
+            parts.append("Image")
+        } else if item.isURL {
+            parts.append("Link: \(item.preview)")
+        } else if item.isCode {
+            parts.append("Code: \(item.preview)")
+        } else {
+            parts.append(item.preview)
+        }
+
+        // Pinned status
+        if isPinned {
+            parts.append("Pinned")
+        }
+
+        // Source app
+        if let appName = item.sourceAppName {
+            parts.append("from \(appName)")
+        }
+
+        // Paste count
+        if item.pasteCount > 0 {
+            parts.append("pasted \(item.pasteCount) time\(item.pasteCount == 1 ? "" : "s")")
+        }
+
+        return parts.joined(separator: ", ")
+    }
 
     private var accentColor: Color {
         isPinned
-            ? .orange
-            : Color(red: 0.0, green: 0.6, blue: 1.0)
+            ? .pinnedOrange
+            : .clipBlue
     }
 
     private var cardBackground: Color {
@@ -27,12 +63,12 @@ struct ClipboardItemRow: View {
             ? Color.white.opacity(0.06)
             : Color.black.opacity(0.03)
     }
-    
+
     // Improved font selection: Monospaced for code
     private var itemFont: Font {
         item.isCode ? .system(.callout, design: .monospaced) : .system(.callout, weight: .medium)
     }
-    
+
     // Content-type icon for faster visual scanning
     @ViewBuilder
     private var contentTypeIcon: some View {
@@ -71,7 +107,7 @@ struct ClipboardItemRow: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                             .frame(width: 14)
-                        
+
                         Text(item.preview)
                             .lineLimit(3)
                             .font(itemFont)
@@ -162,7 +198,51 @@ struct ClipboardItemRow: View {
         .animation(.easeOut(duration: 0.15), value: isHovering)
         .contextMenu {
             Button("Paste") { clipboardManager.paste(item: item) }
-            Button("Paste as Plain Text") { clipboardManager.pasteAsPlainText() }
+            Button("Paste as Plain Text") { clipboardManager.pasteAsPlainText(item: item) }
+
+            // Text transform options (only for text content)
+            if case .text = item.content {
+                Menu("Paste As...") {
+                    ForEach(TextTransform.allCases, id: \.self) { transform in
+                        Button(transform.displayName) {
+                            clipboardManager.pasteWithTransform(item: item, transform: transform)
+                        }
+                    }
+                }
+            }
+
+            Divider()
+
+            // Copy without paste
+            Button("Copy") {
+                clipboardManager.copyWithoutPaste(item: item)
+            }
+
+            // Share menu
+            Button("Share...") {
+                shareItem()
+            }
+
+            // Open Link (for URLs only)
+            if item.isURL, case .text(let urlString) = item.content,
+               let url = URL(string: urlString.trimmingCharacters(in: .whitespacesAndNewlines)) {
+                Button("Open Link") {
+                    NSWorkspace.shared.open(url)
+                }
+            }
+
+            // Edit (text only)
+            if case .text(let text) = item.content {
+                Button("Edit...") {
+                    editText = text
+                    showEditSheet = true
+                }
+            }
+
+            Divider()
+            Button("Add to Paste Stack") {
+                clipboardManager.addToPasteStack(item)
+            }
             Divider()
             Button(isPinned ? "Unpin" : "Pin") {
                 clipboardManager.togglePin(item: item)
@@ -170,6 +250,79 @@ struct ClipboardItemRow: View {
             Divider()
             Button("Delete", role: .destructive) { clipboardManager.delete(item: item) }
         }
+        .sheet(isPresented: $showEditSheet) {
+            EditClipboardItemSheet(
+                text: $editText,
+                onSave: {
+                    clipboardManager.updateItemContent(id: item.id, newContent: editText)
+                    showEditSheet = false
+                },
+                onCancel: {
+                    showEditSheet = false
+                }
+            )
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(accessibilityDescription)
+        .accessibilityHint("Double tap to paste")
+        .accessibilityAddTraits(.isButton)
+    }
+
+    // MARK: - Share Helper
+
+    private func shareItem() {
+        var shareContent: Any?
+
+        switch item.content {
+        case .text(let string):
+            shareContent = string
+        case .image(let image):
+            shareContent = image
+        }
+
+        guard let content = shareContent else { return }
+
+        let picker = NSSharingServicePicker(items: [content])
+        if let window = NSApp.keyWindow, let contentView = window.contentView {
+            picker.show(relativeTo: contentView.bounds, of: contentView, preferredEdge: .minY)
+        }
+    }
+}
+
+// MARK: - Edit Clipboard Item Sheet
+
+struct EditClipboardItemSheet: View {
+    @Binding var text: String
+    let onSave: () -> Void
+    let onCancel: () -> Void
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Text("Edit Clipboard Item")
+                .font(.headline)
+
+            TextEditor(text: $text)
+                .font(.system(.body, design: .monospaced))
+                .frame(minWidth: 400, minHeight: 200)
+                .border(Color.secondary.opacity(0.3), width: 1)
+
+            HStack {
+                Button("Cancel") {
+                    onCancel()
+                }
+                .keyboardShortcut(.cancelAction)
+
+                Spacer()
+
+                Button("Save") {
+                    onSave()
+                }
+                .keyboardShortcut(.defaultAction)
+                .disabled(text.isEmpty)
+            }
+        }
+        .padding()
+        .frame(minWidth: 450, minHeight: 300)
     }
 }
 

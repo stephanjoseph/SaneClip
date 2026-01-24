@@ -7,19 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07EBD6613F07245138A3332A /* TextTransformService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEA795AFED8797FFAE0DD3E /* TextTransformService.swift */; };
+		08715A357C7F5B1C693B5C47 /* CLAUDE.md in Resources */ = {isa = PBXBuildFile; fileRef = DE1B3E95AFE08432850B538B /* CLAUDE.md */; };
 		1F8EB081EA6E82B6C0C73C88 /* ClipboardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E255CCFA37A4633D75D64EF2 /* ClipboardItem.swift */; };
+		2F9FE50868BCF18EF02A4A1E /* SnippetsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9371FC1CADBC7CB49A105A80 /* SnippetsSettingsView.swift */; };
 		31AE3F98F164FB0ECD0829BD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E5B3959F17D55FF5C7F90E6 /* Assets.xcassets */; };
 		33E5382D17E0E77A658BF322 /* SettingsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D5C28D690980C222E8B0E03 /* SettingsModel.swift */; };
+		521359361BE56A852162DBE5 /* Snippet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25007B56789ED465BA3544BA /* Snippet.swift */; };
 		5ED4D24BD177013CA44D2963 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B74750429D17786620EF008E /* main.swift */; };
 		60E0917C7EE6C533E0E339D6 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E0713E5848E1A9394B7528D /* SettingsView.swift */; };
+		74554CCC6E39DFED46437C7C /* BrandColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5449565520B6E5CF68C78D6B /* BrandColors.swift */; };
 		77B7D62B808F69AD4A23279A /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2926A000DAF31581D97F6ACF /* OnboardingView.swift */; };
 		7C2DB9FDEE7F3D537CF02CA1 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 0668E59A15F0F31C5BE746B0 /* KeyboardShortcuts */; };
 		7E6E29E295A478AD08C4DB0E /* ClipboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73D02F6E4DBB9312E67A0AD /* ClipboardManager.swift */; };
 		8B41EC7476C54EDF1695272D /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = C104FF18269706174A84ADDF /* Sparkle */; };
 		8B91331218ABFBC1D64F05B7 /* SavedClipboardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576DAA4FC86516A7F31F8B5F /* SavedClipboardItem.swift */; };
+		9ABA34BEB2F16A4A3646750C /* StorageStatsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE7465DE4D6ABC7FA43FECC8 /* StorageStatsView.swift */; };
 		B3761DF4123417A5EA8C0DF3 /* SaneClipApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FFF4DCFB95C5B26D00A640F /* SaneClipApp.swift */; };
 		D43CFBAE93357055AB6E3423 /* SaneClipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B639CB4375AE4479924B74 /* SaneClipTests.swift */; };
+		D9E962C435414799E3C255BD /* ClipboardRulesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94CC9C6F7E02316FEE7E6C4 /* ClipboardRulesManager.swift */; };
 		DA1E360C2BD5254C912633BE /* ClipboardHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581B9D70FB3BBB83D6583386 /* ClipboardHistoryView.swift */; };
+		DAB08CE697B1C069882BF53B /* SnippetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6FBE5E8C8A623FA0C27ECBE /* SnippetManager.swift */; };
 		FB023FB9283A573C5E3BD4CB /* ClipboardItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 352F7E56F26119F6981AEFB2 /* ClipboardItemRow.swift */; };
 /* End PBXBuildFile section */
 
@@ -35,18 +43,26 @@
 
 /* Begin PBXFileReference section */
 		14D0EBBF195245B8CE7ECF07 /* SaneClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SaneClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		25007B56789ED465BA3544BA /* Snippet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Snippet.swift; sourceTree = "<group>"; };
 		2926A000DAF31581D97F6ACF /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		352F7E56F26119F6981AEFB2 /* ClipboardItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardItemRow.swift; sourceTree = "<group>"; };
+		5449565520B6E5CF68C78D6B /* BrandColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrandColors.swift; sourceTree = "<group>"; };
 		576DAA4FC86516A7F31F8B5F /* SavedClipboardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedClipboardItem.swift; sourceTree = "<group>"; };
 		581B9D70FB3BBB83D6583386 /* ClipboardHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardHistoryView.swift; sourceTree = "<group>"; };
 		6E0713E5848E1A9394B7528D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		6E5B3959F17D55FF5C7F90E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		71B639CB4375AE4479924B74 /* SaneClipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaneClipTests.swift; sourceTree = "<group>"; };
+		7BEA795AFED8797FFAE0DD3E /* TextTransformService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTransformService.swift; sourceTree = "<group>"; };
 		7C13160E8B6EC2A2DB6B0BB5 /* SaneClipTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SaneClipTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D5C28D690980C222E8B0E03 /* SettingsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModel.swift; sourceTree = "<group>"; };
 		8FFF4DCFB95C5B26D00A640F /* SaneClipApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaneClipApp.swift; sourceTree = "<group>"; };
+		9371FC1CADBC7CB49A105A80 /* SnippetsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetsSettingsView.swift; sourceTree = "<group>"; };
+		B6FBE5E8C8A623FA0C27ECBE /* SnippetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnippetManager.swift; sourceTree = "<group>"; };
 		B74750429D17786620EF008E /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		B94CC9C6F7E02316FEE7E6C4 /* ClipboardRulesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardRulesManager.swift; sourceTree = "<group>"; };
+		BE7465DE4D6ABC7FA43FECC8 /* StorageStatsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageStatsView.swift; sourceTree = "<group>"; };
 		D73D02F6E4DBB9312E67A0AD /* ClipboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardManager.swift; sourceTree = "<group>"; };
+		DE1B3E95AFE08432850B538B /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
 		E255CCFA37A4633D75D64EF2 /* ClipboardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -68,6 +84,7 @@
 			children = (
 				E255CCFA37A4633D75D64EF2 /* ClipboardItem.swift */,
 				576DAA4FC86516A7F31F8B5F /* SavedClipboardItem.swift */,
+				25007B56789ED465BA3544BA /* Snippet.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -75,8 +92,12 @@
 		2A07E3A1A776FE6A78310D7A /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				5449565520B6E5CF68C78D6B /* BrandColors.swift */,
 				D73D02F6E4DBB9312E67A0AD /* ClipboardManager.swift */,
+				B94CC9C6F7E02316FEE7E6C4 /* ClipboardRulesManager.swift */,
 				7D5C28D690980C222E8B0E03 /* SettingsModel.swift */,
+				B6FBE5E8C8A623FA0C27ECBE /* SnippetManager.swift */,
+				7BEA795AFED8797FFAE0DD3E /* TextTransformService.swift */,
 				01121E53FCA5AD4EBABF86B1 /* Models */,
 			);
 			path = Core;
@@ -124,6 +145,7 @@
 		A1F5CB5A388610A825BF634E /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				DE1B3E95AFE08432850B538B /* CLAUDE.md */,
 				71B639CB4375AE4479924B74 /* SaneClipTests.swift */,
 			);
 			path = Tests;
@@ -133,6 +155,8 @@
 			isa = PBXGroup;
 			children = (
 				6E0713E5848E1A9394B7528D /* SettingsView.swift */,
+				9371FC1CADBC7CB49A105A80 /* SnippetsSettingsView.swift */,
+				BE7465DE4D6ABC7FA43FECC8 /* StorageStatsView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -163,6 +187,7 @@
 			buildConfigurationList = FA412243DF99EC2331D50153 /* Build configuration list for PBXNativeTarget "SaneClipTests" */;
 			buildPhases = (
 				092E1DF1915B592662C0FFA3 /* Sources */,
+				B458BD3748AE93BB363D1A1E /* Resources */,
 			);
 			buildRules = (
 			);
@@ -250,6 +275,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B458BD3748AE93BB363D1A1E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				08715A357C7F5B1C693B5C47 /* CLAUDE.md in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -287,15 +320,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74554CCC6E39DFED46437C7C /* BrandColors.swift in Sources */,
 				DA1E360C2BD5254C912633BE /* ClipboardHistoryView.swift in Sources */,
 				1F8EB081EA6E82B6C0C73C88 /* ClipboardItem.swift in Sources */,
 				FB023FB9283A573C5E3BD4CB /* ClipboardItemRow.swift in Sources */,
 				7E6E29E295A478AD08C4DB0E /* ClipboardManager.swift in Sources */,
+				D9E962C435414799E3C255BD /* ClipboardRulesManager.swift in Sources */,
 				77B7D62B808F69AD4A23279A /* OnboardingView.swift in Sources */,
 				B3761DF4123417A5EA8C0DF3 /* SaneClipApp.swift in Sources */,
 				8B91331218ABFBC1D64F05B7 /* SavedClipboardItem.swift in Sources */,
 				33E5382D17E0E77A658BF322 /* SettingsModel.swift in Sources */,
 				60E0917C7EE6C533E0E339D6 /* SettingsView.swift in Sources */,
+				521359361BE56A852162DBE5 /* Snippet.swift in Sources */,
+				DAB08CE697B1C069882BF53B /* SnippetManager.swift in Sources */,
+				2F9FE50868BCF18EF02A4A1E /* SnippetsSettingsView.swift in Sources */,
+				9ABA34BEB2F16A4A3646750C /* StorageStatsView.swift in Sources */,
+				07EBD6613F07245138A3332A /* TextTransformService.swift in Sources */,
 				5ED4D24BD177013CA44D2963 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -311,6 +351,68 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		09ED956E5C9E6C403024AEAD /* Release-AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 5.0;
+			};
+			name = "Release-AppStore";
+		};
 		104EE135498F3FF61433880C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -517,6 +619,53 @@
 			};
 			name = Debug;
 		};
+		980353CD513BAEA7BEC43D24 /* Release-AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = arm64;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = SaneClip/SaneClipAppStore.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Distribution";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 3;
+				DEVELOPMENT_TEAM = M78L6FXD48;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = SaneClip/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.1;
+				OTHER_SWIFT_FLAGS = "-D APP_STORE";
+				PRODUCT_BUNDLE_IDENTIFIER = com.saneclip.app;
+				PRODUCT_NAME = SaneClip;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+				VALID_ARCHS = arm64;
+			};
+			name = "Release-AppStore";
+		};
+		BD2901D4BEDF0F5C11AA7631 /* Release-AppStore */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = M78L6FXD48;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.saneclip.SaneClipTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SaneClip.app/Contents/MacOS/SaneClip";
+			};
+			name = "Release-AppStore";
+		};
 		CA0EBC0F552F4BE83CC9DDD3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -544,6 +693,7 @@
 			buildConfigurations = (
 				1897803D5ED9870A35226242 /* Debug */,
 				4857A56DA796F207F2BAF17F /* Release */,
+				09ED956E5C9E6C403024AEAD /* Release-AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -553,6 +703,7 @@
 			buildConfigurations = (
 				8BBC3246D221BD28E92945B7 /* Debug */,
 				7DB276C762F0B10F39DE682F /* Release */,
+				980353CD513BAEA7BEC43D24 /* Release-AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -562,6 +713,7 @@
 			buildConfigurations = (
 				104EE135498F3FF61433880C /* Debug */,
 				CA0EBC0F552F4BE83CC9DDD3 /* Release */,
+				BD2901D4BEDF0F5C11AA7631 /* Release-AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

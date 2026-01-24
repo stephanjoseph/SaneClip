@@ -9,7 +9,6 @@ extension Notification.Name {
     static let menuBarIconChanged = Notification.Name("menuBarIconChanged")
 }
 
-
 // MARK: - Settings View
 
 struct SettingsView: View {
@@ -18,6 +17,8 @@ struct SettingsView: View {
     enum SettingsTab: String, CaseIterable, Identifiable {
         case general = "General"
         case shortcuts = "Shortcuts"
+        case snippets = "Snippets"
+        case storage = "Storage"
         case about = "About"
 
         var id: String { rawValue }
@@ -49,6 +50,12 @@ struct SettingsView: View {
                     GeneralSettingsView()
                 case .shortcuts:
                     ShortcutsSettingsView()
+                case .snippets:
+                    SnippetsSettingsView()
+                        .padding(20)
+                case .storage:
+                    StorageStatsView()
+                        .padding(20)
                 case .about:
                     AboutSettingsView()
                 case .none:
@@ -64,15 +71,19 @@ struct SettingsView: View {
         switch tab {
         case .general: return "gear"
         case .shortcuts: return "keyboard"
+        case .snippets: return "text.quote"
+        case .storage: return "chart.pie"
         case .about: return "info.circle"
         }
     }
 
     private func iconColor(for tab: SettingsTab) -> Color {
         switch tab {
-        case .general: return .gray
-        case .shortcuts: return .orange
-        case .about: return .secondary
+        case .general: return .textStone
+        case .shortcuts: return .clipBlue
+        case .snippets: return .green
+        case .storage: return .pinnedOrange
+        case .about: return .brandSilver
         }
     }
 }
@@ -131,7 +142,8 @@ struct GeneralSettingsView: View {
                                 settings.protectPasswords = true
                             } else {
                                 // Turning OFF - always requires auth
-                                authenticateForSecurityChange(reason: "Authenticate to allow password manager copies in history") {
+                                let reason = "Authenticate to allow password manager copies in history"
+                                authenticateForSecurityChange(reason: reason) {
                                     settings.protectPasswords = false
                                 }
                             }
@@ -198,10 +210,62 @@ struct GeneralSettingsView: View {
                         .frame(width: 80)
                     }
                     CompactDivider()
+                    CompactRow("Auto-delete After") {
+                        Picker("", selection: Binding(
+                            get: { settings.autoExpireHours },
+                            set: { settings.autoExpireHours = $0 }
+                        )) {
+                            Text("Never").tag(0)
+                            Text("1 hour").tag(1)
+                            Text("24 hours").tag(24)
+                            Text("7 days").tag(168)
+                            Text("30 days").tag(720)
+                        }
+                        .pickerStyle(.menu)
+                        .frame(width: 100)
+                        .help("Pinned items are never deleted")
+                    }
+                    CompactDivider()
                     CompactRow("Storage") {
                         Text("~/Library/Application Support/SaneClip/")
                             .font(.caption)
                             .foregroundStyle(.secondary)
+                    }
+                    CompactDivider()
+                    CompactRow("Data") {
+                        HStack(spacing: 8) {
+                            Button("Export...") {
+                                exportHistory()
+                            }
+                            .buttonStyle(.bordered)
+                            .controlSize(.small)
+
+                            Button("Import...") {
+                                importHistory()
+                            }
+                            .buttonStyle(.bordered)
+                            .controlSize(.small)
+                        }
+                    }
+                }
+
+                ClipboardRulesSection()
+
+                CompactSection("Backup & Restore") {
+                    CompactRow("Settings") {
+                        HStack(spacing: 8) {
+                            Button("Export...") {
+                                exportSettings()
+                            }
+                            .buttonStyle(.bordered)
+                            .controlSize(.small)
+
+                            Button("Import...") {
+                                importSettings()
+                            }
+                            .buttonStyle(.bordered)
+                            .controlSize(.small)
+                        }
                     }
                 }
             }
@@ -251,6 +315,127 @@ struct GeneralSettingsView: View {
                 }
                 isAuthenticating = false
             }
+        }
+    }
+
+    private func exportHistory() {
+        let panel = NSSavePanel()
+        panel.allowedContentTypes = [.json]
+        panel.nameFieldStringValue = "clipboard-history.json"
+        panel.title = "Export Clipboard History"
+
+        if panel.runModal() == .OK, let url = panel.url {
+            if let data = ClipboardManager.exportHistoryFromDisk() {
+                do {
+                    try data.write(to: url)
+                } catch {
+                    print("Failed to export history: \(error)")
+                }
+            }
+        }
+    }
+
+    private func importHistory() {
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = [.json]
+        panel.canChooseFiles = true
+        panel.canChooseDirectories = false
+        panel.allowsMultipleSelection = false
+        panel.title = "Import Clipboard History"
+        panel.message = "Select a previously exported clipboard history file"
+
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+
+        // Show merge/replace confirmation
+        let alert = NSAlert()
+        alert.messageText = "Import Clipboard History"
+        alert.informativeText = "How would you like to import the history?"
+        alert.addButton(withTitle: "Merge")
+        alert.addButton(withTitle: "Replace All")
+        alert.addButton(withTitle: "Cancel")
+        alert.alertStyle = .informational
+
+        let response = alert.runModal()
+        switch response {
+        case .alertFirstButtonReturn:  // Merge
+            performImport(from: url, merge: true)
+        case .alertSecondButtonReturn:  // Replace
+            performImport(from: url, merge: false)
+        default:
+            break
+        }
+    }
+
+    private func performImport(from url: URL, merge: Bool) {
+        guard let manager = ClipboardManager.shared else { return }
+        do {
+            let count = try manager.importHistory(from: url, merge: merge)
+            let alert = NSAlert()
+            alert.messageText = "Import Successful"
+            alert.informativeText = merge
+                ? "Imported \(count) new items."
+                : "Replaced history with \(count) items."
+            alert.alertStyle = .informational
+            alert.runModal()
+        } catch {
+            let alert = NSAlert()
+            alert.messageText = "Import Failed"
+            alert.informativeText = error.localizedDescription
+            alert.alertStyle = .warning
+            alert.runModal()
+        }
+    }
+
+    private func exportSettings() {
+        let panel = NSSavePanel()
+        panel.allowedContentTypes = [.json]
+        panel.nameFieldStringValue = "saneclip-settings.json"
+        panel.title = "Export Settings"
+
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+
+        do {
+            let data = try settings.exportSettings()
+            try data.write(to: url)
+            let alert = NSAlert()
+            alert.messageText = "Settings Exported"
+            alert.informativeText = "Your settings have been saved."
+            alert.alertStyle = .informational
+            alert.runModal()
+        } catch {
+            let alert = NSAlert()
+            alert.messageText = "Export Failed"
+            alert.informativeText = error.localizedDescription
+            alert.alertStyle = .warning
+            alert.runModal()
+        }
+    }
+
+    private func importSettings() {
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = [.json]
+        panel.canChooseFiles = true
+        panel.canChooseDirectories = false
+        panel.allowsMultipleSelection = false
+        panel.title = "Import Settings"
+        panel.message = "Select a previously exported settings file"
+
+        guard panel.runModal() == .OK, let url = panel.url else { return }
+
+        do {
+            let data = try Data(contentsOf: url)
+            try settings.importSettings(from: data)
+            let alert = NSAlert()
+            alert.messageText = "Settings Imported"
+            alert.informativeText = "Your settings have been restored."
+            alert.alertStyle = .informational
+            alert.runModal()
+        } catch {
+            let alert = NSAlert()
+            alert.messageText = "Import Failed"
+            alert.informativeText = error.localizedDescription
+            alert.alertStyle = .warning
+            alert.runModal()
         }
     }
 }
@@ -400,6 +585,10 @@ struct ShortcutsSettingsView: View {
                     CompactRow("Paste as Plain Text") {
                         KeyboardShortcuts.Recorder(for: .pasteAsPlainText)
                     }
+                    CompactDivider()
+                    CompactRow("Paste from Stack") {
+                        KeyboardShortcuts.Recorder(for: .pasteFromStack)
+                    }
                 }
 
                 CompactSection("Quick Paste (Items 1-9)") {
@@ -489,7 +678,7 @@ struct AboutSettingsView: View {
 
             // Links row
             HStack(spacing: 16) {
-                Link(destination: URL(string: "https://github.com/stephanjoseph/SaneClip")!) {
+                Link(destination: URL(string: "https://github.com/sane-apps/SaneClip")!) {
                     Label("GitHub", systemImage: "link")
                 }
                 .buttonStyle(.bordered)
@@ -516,7 +705,7 @@ struct AboutSettingsView: View {
                 .buttonStyle(.bordered)
                 .controlSize(.large)
 
-                Link(destination: URL(string: "https://github.com/stephanjoseph/SaneClip/issues")!) {
+                Link(destination: URL(string: "https://github.com/sane-apps/SaneClip/issues")!) {
                     Label("Report Issue", systemImage: "ladybug")
                 }
                 .buttonStyle(.bordered)
@@ -570,7 +759,8 @@ struct AboutSettingsView: View {
                 VStack(alignment: .leading, spacing: 16) {
                     GroupBox {
                         VStack(alignment: .leading, spacing: 8) {
-                            Link("KeyboardShortcuts", destination: URL(string: "https://github.com/sindresorhus/KeyboardShortcuts")!)
+                            let url = URL(string: "https://github.com/sindresorhus/KeyboardShortcuts")!
+                            Link("KeyboardShortcuts", destination: url)
                                 .font(.headline)
 
                             Text("""
@@ -679,7 +869,10 @@ struct AboutSettingsView: View {
                     .padding(.top, 8)
 
                     // Personal message
-                    Text("I need your help to keep SaneClip alive. Your support — whether one-time or monthly — makes this possible. Thank you.")
+                    Text("""
+                        I need your help to keep SaneClip alive. \
+                        Your support — whether one-time or monthly — makes this possible. Thank you.
+                        """)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal)
@@ -692,7 +885,7 @@ struct AboutSettingsView: View {
                         .padding(.horizontal, 40)
 
                     // GitHub Sponsors
-                    Link(destination: URL(string: "https://github.com/sponsors/stephanjoseph")!) {
+                    Link(destination: URL(string: "https://github.com/sponsors/sane-apps")!) {
                         HStack(spacing: 8) {
                             Image(systemName: "heart.fill")
                                 .foregroundStyle(.pink)
@@ -779,9 +972,9 @@ struct SettingsGradientBackground: View {
                 // Subtle blue/purple tint
                 LinearGradient(
                     colors: [
-                        Color.blue.opacity(0.08),
+                        Color.clipBlue.opacity(0.08),
                         Color.purple.opacity(0.05),
-                        Color.blue.opacity(0.03)
+                        Color.clipBlue.opacity(0.03)
                     ],
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
@@ -860,9 +1053,12 @@ struct CompactSection<Content: View>: View {
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(colorScheme == .dark
                         ? Color.white.opacity(0.12)
-                        : Color.blue.opacity(0.15), lineWidth: 1)
+                        : Color.clipBlue.opacity(0.15), lineWidth: 1)
             )
-            .shadow(color: colorScheme == .dark ? .black.opacity(0.15) : .blue.opacity(0.08), radius: colorScheme == .dark ? 8 : 6, x: 0, y: 3)
+            .shadow(
+                color: colorScheme == .dark ? .black.opacity(0.15) : .clipBlue.opacity(0.08),
+                radius: colorScheme == .dark ? 8 : 6, x: 0, y: 3
+            )
             .padding(.horizontal, 2)
         }
     }
@@ -970,5 +1166,68 @@ enum SettingsWindowController {
         window = newWindow
         newWindow.makeKeyAndOrderFront(nil)
         NSApp.activate(ignoringOtherApps: true)
+    }
+}
+
+// MARK: - Clipboard Rules Section
+
+struct ClipboardRulesSection: View {
+    @State private var rules = ClipboardRulesManager.shared
+
+    var body: some View {
+        CompactSection("Clipboard Rules") {
+            CompactToggle(
+                label: "Strip URL tracking parameters",
+                isOn: Binding(
+                    get: { rules.stripTrackingParams },
+                    set: { rules.stripTrackingParams = $0 }
+                )
+            )
+            .help("Remove utm_*, fbclid, and other tracking params from URLs")
+
+            CompactDivider()
+
+            CompactToggle(
+                label: "Auto-trim whitespace",
+                isOn: Binding(
+                    get: { rules.autoTrimWhitespace },
+                    set: { rules.autoTrimWhitespace = $0 }
+                )
+            )
+            .help("Remove leading/trailing spaces from copied text")
+
+            CompactDivider()
+
+            CompactToggle(
+                label: "Normalize line endings",
+                isOn: Binding(
+                    get: { rules.normalizeLineEndings },
+                    set: { rules.normalizeLineEndings = $0 }
+                )
+            )
+            .help("Convert Windows (CRLF) to Unix (LF) line endings")
+
+            CompactDivider()
+
+            CompactToggle(
+                label: "Remove duplicate spaces",
+                isOn: Binding(
+                    get: { rules.removeDuplicateSpaces },
+                    set: { rules.removeDuplicateSpaces = $0 }
+                )
+            )
+            .help("Collapse multiple consecutive spaces into one")
+
+            CompactDivider()
+
+            CompactToggle(
+                label: "Lowercase URL hosts",
+                isOn: Binding(
+                    get: { rules.lowercaseURLs },
+                    set: { rules.lowercaseURLs = $0 }
+                )
+            )
+            .help("Convert URL hostnames to lowercase")
+        }
     }
 }

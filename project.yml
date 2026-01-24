@@ -8,6 +8,7 @@ options:
 configs:
   Debug: debug
   Release: release
+  Release-AppStore: release
 
 packages:
   KeyboardShortcuts:
@@ -78,8 +79,12 @@ targets:
     sources:
       - main.swift
       - SaneClipApp.swift
-      - Core
-      - UI
+      - path: Core
+        excludes:
+          - "**/CLAUDE.md"
+      - path: UI
+        excludes:
+          - "**/CLAUDE.md"
       - Resources
     dependencies:
       - package: KeyboardShortcuts
@@ -119,6 +124,11 @@ targets:
           PRODUCT_BUNDLE_IDENTIFIER: com.saneclip.app
           CODE_SIGN_IDENTITY: "Developer ID Application: Stephan Joseph (M78L6FXD48)"
           CODE_SIGN_ENTITLEMENTS: SaneClip/SaneClip.entitlements
+        Release-AppStore:
+          PRODUCT_BUNDLE_IDENTIFIER: com.saneclip.app
+          CODE_SIGN_IDENTITY: "Apple Distribution"
+          CODE_SIGN_ENTITLEMENTS: SaneClip/SaneClipAppStore.entitlements
+          OTHER_SWIFT_FLAGS: "-D APP_STORE"
     postCompileScripts:
       - script: |
           if which swiftlint >/dev/null; then
