@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		07EBD6613F07245138A3332A /* TextTransformService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BEA795AFED8797FFAE0DD3E /* TextTransformService.swift */; };
 		08715A357C7F5B1C693B5C47 /* CLAUDE.md in Resources */ = {isa = PBXBuildFile; fileRef = DE1B3E95AFE08432850B538B /* CLAUDE.md */; };
+		08F6A8051E9A68AE694F95A3 /* SyncSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF5998D0EE9CA458C07F45B /* SyncSettingsView.swift */; };
 		1F8EB081EA6E82B6C0C73C88 /* ClipboardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = E255CCFA37A4633D75D64EF2 /* ClipboardItem.swift */; };
 		2F9FE50868BCF18EF02A4A1E /* SnippetsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9371FC1CADBC7CB49A105A80 /* SnippetsSettingsView.swift */; };
 		31AE3F98F164FB0ECD0829BD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E5B3959F17D55FF5C7F90E6 /* Assets.xcassets */; };
@@ -34,6 +35,7 @@
 		D9E962C435414799E3C255BD /* ClipboardRulesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94CC9C6F7E02316FEE7E6C4 /* ClipboardRulesManager.swift */; };
 		DA1E360C2BD5254C912633BE /* ClipboardHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581B9D70FB3BBB83D6583386 /* ClipboardHistoryView.swift */; };
 		DAB08CE697B1C069882BF53B /* SnippetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6FBE5E8C8A623FA0C27ECBE /* SnippetManager.swift */; };
+		EE198F1A5CB7D4A9EBDA28AE /* CloudKitSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7166C4C34DA291C4BEB4A3BB /* CloudKitSyncService.swift */; };
 		FB023FB9283A573C5E3BD4CB /* ClipboardItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 352F7E56F26119F6981AEFB2 /* ClipboardItemRow.swift */; };
 /* End PBXBuildFile section */
 
@@ -59,6 +61,7 @@
 		581B9D70FB3BBB83D6583386 /* ClipboardHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardHistoryView.swift; sourceTree = "<group>"; };
 		6E0713E5848E1A9394B7528D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		6E5B3959F17D55FF5C7F90E6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7166C4C34DA291C4BEB4A3BB /* CloudKitSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitSyncService.swift; sourceTree = "<group>"; };
 		71B639CB4375AE4479924B74 /* SaneClipTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaneClipTests.swift; sourceTree = "<group>"; };
 		7B181DC2ABBFC0F6C29A7CB9 /* AutoPurgeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoPurgeService.swift; sourceTree = "<group>"; };
 		7BEA795AFED8797FFAE0DD3E /* TextTransformService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTransformService.swift; sourceTree = "<group>"; };
@@ -76,6 +79,7 @@
 		D73D02F6E4DBB9312E67A0AD /* ClipboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardManager.swift; sourceTree = "<group>"; };
 		DE1B3E95AFE08432850B538B /* CLAUDE.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CLAUDE.md; sourceTree = "<group>"; };
 		E255CCFA37A4633D75D64EF2 /* ClipboardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardItem.swift; sourceTree = "<group>"; };
+		FBF5998D0EE9CA458C07F45B /* SyncSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncSettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +118,7 @@
 				8963796CABEF00573B399B2C /* Intents */,
 				01121E53FCA5AD4EBABF86B1 /* Models */,
 				903C3BC12BB2E45AD8A34011 /* Security */,
+				C0DBDA2E36872AC2C4583362 /* Sync */,
 				A34F8DDA889A2E5A4E7DF589 /* URLScheme */,
 				771DF3F953E6CCFB00E1CBD5 /* Webhooks */,
 			);
@@ -215,8 +220,17 @@
 				6E0713E5848E1A9394B7528D /* SettingsView.swift */,
 				9371FC1CADBC7CB49A105A80 /* SnippetsSettingsView.swift */,
 				BE7465DE4D6ABC7FA43FECC8 /* StorageStatsView.swift */,
+				FBF5998D0EE9CA458C07F45B /* SyncSettingsView.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		C0DBDA2E36872AC2C4583362 /* Sync */ = {
+			isa = PBXGroup;
+			children = (
+				7166C4C34DA291C4BEB4A3BB /* CloudKitSyncService.swift */,
+			);
+			path = Sync;
 			sourceTree = "<group>";
 		};
 		D9D0EFB2C3ADEBAA6D5BF62C /* UI */ = {
@@ -385,6 +399,7 @@
 				FB023FB9283A573C5E3BD4CB /* ClipboardItemRow.swift in Sources */,
 				7E6E29E295A478AD08C4DB0E /* ClipboardManager.swift in Sources */,
 				D9E962C435414799E3C255BD /* ClipboardRulesManager.swift in Sources */,
+				EE198F1A5CB7D4A9EBDA28AE /* CloudKitSyncService.swift in Sources */,
 				3D6003A74837B96CD1CE4A36 /* EncryptionService.swift in Sources */,
 				77B7D62B808F69AD4A23279A /* OnboardingView.swift in Sources */,
 				B3761DF4123417A5EA8C0DF3 /* SaneClipApp.swift in Sources */,
@@ -397,6 +412,7 @@
 				DAB08CE697B1C069882BF53B /* SnippetManager.swift in Sources */,
 				2F9FE50868BCF18EF02A4A1E /* SnippetsSettingsView.swift in Sources */,
 				9ABA34BEB2F16A4A3646750C /* StorageStatsView.swift in Sources */,
+				08F6A8051E9A68AE694F95A3 /* SyncSettingsView.swift in Sources */,
 				07EBD6613F07245138A3332A /* TextTransformService.swift in Sources */,
 				8D5889EE4B31459E191B26C8 /* URLSchemeHandler.swift in Sources */,
 				88429CF77152B054F581B567 /* WebhookService.swift in Sources */,
@@ -660,7 +676,7 @@
 			buildSettings = {
 				ARCHS = arm64;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = SaneClip/SaneClip.entitlements;
+				CODE_SIGN_ENTITLEMENTS = SaneClip/SaneClipDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = YES;
 				CODE_SIGN_STYLE = Manual;

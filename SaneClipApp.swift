@@ -64,6 +64,8 @@ class SaneClipAppDelegate: NSObject, NSApplicationDelegate {
     private var updateService: UpdateService!
     private var onboardingWindow: NSWindow?
     nonisolated(unsafe) private var menuBarIconObserver: NSObjectProtocol?
+    nonisolated(unsafe) private var triggerSyncObserver: NSObjectProtocol?
+    nonisolated(unsafe) private var syncedItemsObserver: NSObjectProtocol?
 
     /// Track when user last authenticated with Touch ID (grace period)
     private var lastAuthenticationTime: Date?
@@ -71,6 +73,12 @@ class SaneClipAppDelegate: NSObject, NSApplicationDelegate {
 
     deinit {
         if let observer = menuBarIconObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        if let observer = triggerSyncObserver {
+            NotificationCenter.default.removeObserver(observer)
+        }
+        if let observer = syncedItemsObserver {
             NotificationCenter.default.removeObserver(observer)
         }
     }
@@ -111,6 +119,31 @@ class SaneClipAppDelegate: NSObject, NSApplicationDelegate {
                let button = self?.statusItem.button {
                 button.image = NSImage(systemSymbolName: iconName, accessibilityDescription: "SaneClip")
             }
+        }
+
+        // Listen for sync triggers (from URL scheme or other sources)
+        triggerSyncObserver = NotificationCenter.default.addObserver(
+            forName: .triggerSync,
+            object: nil,
+            queue: .main
+        ) { _ in
+            Task {
+                do {
+                    _ = try await CloudKitSyncService.shared.fetchChanges()
+                } catch {
+                    appLogger.warning("Sync triggered but failed: \(error.localizedDescription)")
+                }
+            }
+        }
+
+        // Listen for synced items received
+        syncedItemsObserver = NotificationCenter.default.addObserver(
+            forName: .syncedItemsReceived,
+            object: nil,
+            queue: .main
+        ) { [weak self] notification in
+            guard let items = notification.userInfo?["items"] as? [ClipboardItem] else { return }
+            self?.handleSyncedItems(items)
         }
 
         // Create right-click context menu
@@ -380,5 +413,22 @@ class SaneClipAppDelegate: NSObject, NSApplicationDelegate {
     @objc private func pasteFromMenu(_ sender: NSMenuItem) {
         let index = sender.tag
         clipboardManager.pasteItemAt(index: index)
+    }
+
+    // MARK: - Sync
+
+    /// Handles items received from iCloud sync
+    private func handleSyncedItems(_ items: [ClipboardItem]) {
+        guard !items.isEmpty else { return }
+
+        // Merge synced items into history, avoiding duplicates
+        for item in items {
+            // Check if item already exists by ID
+            if !clipboardManager.history.contains(where: { $0.id == item.id }) {
+                clipboardManager.addSyncedItem(item)
+            }
+        }
+
+        appLogger.info("Synced \(items.count) items from iCloud")
     }
 }

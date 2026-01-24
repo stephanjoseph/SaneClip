@@ -124,7 +124,7 @@ targets:
         Debug:
           PRODUCT_BUNDLE_IDENTIFIER: com.saneclip.dev
           CODE_SIGN_IDENTITY: "Apple Development"
-          CODE_SIGN_ENTITLEMENTS: SaneClip/SaneClip.entitlements
+          CODE_SIGN_ENTITLEMENTS: SaneClip/SaneClipDebug.entitlements
         Release:
           PRODUCT_BUNDLE_IDENTIFIER: com.saneclip.app
           CODE_SIGN_IDENTITY: "Developer ID Application: Stephan Joseph (M78L6FXD48)"
