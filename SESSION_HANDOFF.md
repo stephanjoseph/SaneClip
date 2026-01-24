@@ -1,4 +1,4 @@
-# Session Handoff - 2026-01-23
+# Session Handoff - 2026-01-24
 
 > **Navigation**
 > | Bugs | Features | How to Work | Releases | Testimonials |
@@ -7,96 +7,92 @@
 
 ---
 
-## 🧪 PRIORITY: Test Cloudflare Sparkle Updates
+## Current Status (2026-01-24)
 
-**Why here:** SaneClip has no active users = safe to test. SaneBar has paying customers.
+### Build Status
+- **All 23 tests passing**
+- **Build succeeds**
 
-**Goal:** Verify Sparkle auto-updates work from Cloudflare R2 before switching SaneBar production.
+### Completed Phases
 
-**Test plan:**
-1. Upload old SaneClip DMG to R2 bucket (`sanebar-downloads` or new bucket)
-2. Create SaneClip appcast pointing to Cloudflare
-3. Install old version locally
-4. Trigger "Check for Updates"
-5. Verify download + signature verification + install works
-6. If success → switch SaneBar appcast to Cloudflare, delete GitHub releases
+| Phase | Version | Features | Commit |
+|-------|---------|----------|--------|
+| Phase 2 | v1.5 | 9 Power User features | `e1eeb60` |
+| Phase 3 | v2.0 | 8 Pro features (security, sync, automation) | `00f805c`, `7b87296` |
+| Phase 4 (partial) | - | macOS Widgets | `64e1cc6` |
 
-**Infrastructure (already built for SaneBar):**
-- R2 bucket: `sanebar-downloads`
-- Worker: `dist.sanebar.com`
-- Can reuse or create `dist.saneclip.com`
+### Phase 4 Progress
+
+| Feature | Status |
+|---------|--------|
+| macOS Widgets | ✅ Complete |
+| Shared Data Layer | Deferred (not needed for widgets) |
+| iOS Companion App | Not started |
+| iOS Widgets | Not started (requires iOS app) |
 
 ---
 
-## Previous Session (2026-01-19)
+## Recent Session: macOS Widgets (Jan 24)
 
-### Completed
+### Files Created
+- `Widgets/SaneClipWidgets.swift` - Widget bundle entry point
+- `Widgets/RecentClipsWidget.swift` - Recent clips widget (Small, Medium)
+- `Widgets/PinnedClipsWidget.swift` - Pinned clips widget (Small, Medium)
+- `Widgets/Info.plist` - Widget extension Info.plist
+- `Widgets/SaneClipWidgets.entitlements` - Release entitlements (App Group)
+- `Widgets/SaneClipWidgetsDebug.entitlements` - Debug entitlements (no App Group)
+- `Core/Models/WidgetClipboardItem.swift` - Shared widget data model
 
-### Security Audit & Fixes
-- Added transient/concealed clipboard type detection (password protection)
-- Added hardcoded password manager bundle IDs exclusion list
-- Added `.completeFileProtection` for `history.json` persistence
+### Files Modified
+- `Core/ClipboardManager.swift` - Added updateWidgetData() method
+- `SaneClip/SaneClip.entitlements` - Added App Group
+- `project.yml` - Added SaneClipWidgets target
+- `README.md` - Added Widgets section
 
-### Refactoring
-- Extracted `ClipboardManager`, `SettingsModel` to `Core/`
-- Extracted `ClipboardItem`, `SavedClipboardItem` to `Core/Models/`
-- Extracted `ClipboardHistoryView`, `ClipboardItemRow` to `UI/History/`
+### Key Implementation Details
 
-### UI/UX Improvements
-- Single click to paste (removed redundant document icon button)
-- Code detection with monospaced font
-- Stats now show 'wd' and 'ch' for clarity
-- Added 'Paste as Plain Text' to context menu
-- **Hover highlighting** - Cards brighten, scale, and show pointer cursor on hover
-- **Content-type icons** - Link, code, or text icon for faster scanning
-- **Glass material background** - Modern macOS material blur effect
+**App Group:** `group.com.saneclip.app`
+- Required for sharing data between main app and widget
+- Only in Release entitlements (Debug builds without App Group work fine)
 
-### Smart Features
-- **URL tracking stripping** - Auto-removes utm_*, fbclid, gclid, etc. from URLs
-- **Pinned items persistence** - Pinned items survive app restart
+**Widget Data Flow:**
+1. ClipboardManager.saveHistory() calls updateWidgetData()
+2. updateWidgetData() writes WidgetDataContainer to App Group container
+3. WidgetKit.reloadAllTimelines() triggers widget refresh
+4. Widget providers read from shared container
 
-### Release Prep
-- Updated `MARKETING_VERSION` to 1.1 with build 3
-- Fixed appcast.xml (build numbers, stats description)
-- Updated documentation (TODO.md, ROADMAP.md)
+**Debug vs Release:**
+- Debug: No App Group (builds without provisioning profile)
+- Release: Full App Group (requires provisioning profile with capability)
 
-## Current State
+---
 
-**Version 1.1 ready for release.** All features verified ✅
+## Portal Setup Required
 
-## Pending Tasks
+### CloudKit (Phase 3)
+- Container: `iCloud.com.saneclip.app`
+- Must be created in Apple Developer portal before Release builds
 
-### ⚠️ UPDATE MARKETING IMAGES
-- Screenshots in `docs/images/` are outdated (old UI with paste buttons)
-- Need new screenshots showing:
-  - Clean row design (no document icon)
-  - "wd · ch" stats format
-  - Hover highlighting effect
+### App Group (Phase 4 Widgets)
+- Group: `group.com.saneclip.app`
+- Must be registered in Apple Developer portal for Release builds
 
-### Other
-- Consider adding unit tests for `ClipboardManager`
-
-## Key Documentation
-- `APP_STORE_CHECKLIST.md`: Guide for dual distribution (App Store + Website).
-- `TODO.md`: Current tasks and recent completions.
-- `ROADMAP.md`: Future feature planning.
-
-## Bundle IDs (DO NOT CONFUSE)
-
-| Config | Bundle ID | Use |
-|--------|-----------|-----|
-| Debug | `com.saneclip.dev` | Local testing ONLY |
-| Release | `com.saneclip.app` | Production/users |
+---
 
 ## Quick Commands
 
 ```bash
-# Clean launch (ALWAYS use this pattern)
-killall SaneClip 2>/dev/null; sleep 1; pgrep SaneClip && echo "ABORT" || open /path/to/SaneClip.app
+# Build & Test (after XcodeBuildMCP defaults set)
+build_macos
+test_macos
 
-# Reset onboarding (debug only)
-defaults delete com.saneclip.dev hasCompletedOnboarding
-
-# Build
-xcodebuild -project SaneClip.xcodeproj -scheme SaneClip -configuration Debug build
+# Regenerate project after new files
+xcodegen generate
 ```
+
+## Bundle IDs
+
+| Target | Debug | Release |
+|--------|-------|---------|
+| SaneClip | `com.saneclip.dev` | `com.saneclip.app` |
+| SaneClipWidgets | `com.saneclip.dev.widgets` | `com.saneclip.app.widgets` |

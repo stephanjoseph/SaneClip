@@ -3,6 +3,7 @@ options:
   bundleIdPrefix: com.saneclip
   deploymentTarget:
     macOS: 15.0
+    iOS: 26.0
   xcodeVersion: 16.0
 
 configs:
@@ -63,6 +64,18 @@ schemes:
     test:
       targets:
         - SaneClipTests
+    profile:
+      config: Release
+    run:
+      config: Debug
+    archive:
+      config: Release
+
+  SaneClipIOS:
+    build:
+      targets:
+        SaneClipIOS: all
+        SaneClipIOSWidgets: all
     profile:
       config: Release
     run:
@@ -206,3 +219,102 @@ targets:
           PRODUCT_BUNDLE_IDENTIFIER: com.saneclip.app.widgets
           CODE_SIGN_IDENTITY: "Apple Distribution"
           CODE_SIGN_ENTITLEMENTS: Widgets/SaneClipWidgets.entitlements
+
+  # iOS App
+  SaneClipIOS:
+    type: application
+    platform: iOS
+    bundleId: com.saneclip.app.ios
+    deploymentTarget:
+      iOS: 26.0
+    sources:
+      - iOS
+      - path: Shared
+        excludes:
+          - "**/CLAUDE.md"
+      - path: Core/Models/WidgetClipboardItem.swift
+    dependencies:
+      - target: SaneClipIOSWidgets
+        embed: true
+        codeSign: true
+    info:
+      path: iOS/Info.plist
+      properties:
+        CFBundleDisplayName: SaneClip
+        LSApplicationCategoryType: "public.app-category.productivity"
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    settings:
+      base:
+        PRODUCT_NAME: SaneClip
+        PRODUCT_BUNDLE_IDENTIFIER: com.saneclip.app.ios
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ENABLE_PREVIEWS: YES
+        SWIFT_VERSION: 6.0
+        IPHONEOS_DEPLOYMENT_TARGET: 26.0
+        TARGETED_DEVICE_FAMILY: "1,2"
+        DEVELOPMENT_TEAM: M78L6FXD48
+        CODE_SIGN_STYLE: Manual
+      configs:
+        Debug:
+          PRODUCT_BUNDLE_IDENTIFIER: com.saneclip.dev.ios
+          CODE_SIGN_IDENTITY: "Apple Development"
+          CODE_SIGN_ENTITLEMENTS: iOS/SaneClipIOSDebug.entitlements
+        Release:
+          PRODUCT_BUNDLE_IDENTIFIER: com.saneclip.app.ios
+          CODE_SIGN_IDENTITY: "Apple Distribution"
+          CODE_SIGN_ENTITLEMENTS: iOS/SaneClipIOS.entitlements
+        Release-AppStore:
+          PRODUCT_BUNDLE_IDENTIFIER: com.saneclip.app.ios
+          CODE_SIGN_IDENTITY: "Apple Distribution"
+          CODE_SIGN_ENTITLEMENTS: iOS/SaneClipIOS.entitlements
+
+  # iOS Widgets
+  SaneClipIOSWidgets:
+    type: app-extension
+    platform: iOS
+    bundleId: com.saneclip.app.ios.widgets
+    deploymentTarget:
+      iOS: 26.0
+    sources:
+      - iOSWidgets
+      - path: Core/Models/WidgetClipboardItem.swift
+    info:
+      path: iOSWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: SaneClip Widgets
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_NAME: SaneClipIOSWidgets
+        PRODUCT_BUNDLE_IDENTIFIER: com.saneclip.app.ios.widgets
+        SWIFT_VERSION: 6.0
+        IPHONEOS_DEPLOYMENT_TARGET: 26.0
+        TARGETED_DEVICE_FAMILY: "1,2"
+        DEVELOPMENT_TEAM: M78L6FXD48
+        CODE_SIGN_STYLE: Manual
+        SKIP_INSTALL: YES
+      configs:
+        Debug:
+          PRODUCT_BUNDLE_IDENTIFIER: com.saneclip.dev.ios.widgets
+          CODE_SIGN_IDENTITY: "Apple Development"
+          CODE_SIGN_ENTITLEMENTS: iOSWidgets/SaneClipIOSWidgetsDebug.entitlements
+        Release:
+          PRODUCT_BUNDLE_IDENTIFIER: com.saneclip.app.ios.widgets
+          CODE_SIGN_IDENTITY: "Apple Distribution"
+          CODE_SIGN_ENTITLEMENTS: iOSWidgets/SaneClipIOSWidgets.entitlements
+        Release-AppStore:
+          PRODUCT_BUNDLE_IDENTIFIER: com.saneclip.app.ios.widgets
+          CODE_SIGN_IDENTITY: "Apple Distribution"
+          CODE_SIGN_ENTITLEMENTS: iOSWidgets/SaneClipIOSWidgets.entitlements
