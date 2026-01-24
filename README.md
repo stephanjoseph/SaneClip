@@ -165,6 +165,21 @@ Widgets automatically update when you copy new content. Add via right-click desk
 
 ---
 
+### iOS Companion App
+
+View your clipboard history on iPhone and iPad:
+
+- **History Tab** — Browse all recent clips synced from your Mac
+- **Pinned Tab** — Quick access to your favorites
+- **Copy to iOS** — Swipe any item to copy it to your iPhone clipboard
+- **iOS Widgets** — Recent and Pinned clips for Home Screen and Lock Screen
+
+The iOS app syncs via iCloud, so your clipboard history is available everywhere. Copy on Mac, paste on iPhone.
+
+*Requires iCloud sync enabled on both devices.*
+
+---
+
 ### Data Management
 
 #### 📤 Export History
@@ -238,8 +253,13 @@ Download the latest DMG from [saneclip.com](https://saneclip.com) — **$5 one-t
 
 ## Requirements
 
-- **macOS 15.0** (Sequoia) or later
+**macOS App:**
+- macOS 15.0 (Sequoia) or later
 - Apple Silicon Mac (M1+)
+
+**iOS App:**
+- iOS 18.0 or later
+- iPhone or iPad
 
 ---
 
