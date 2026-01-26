@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <strong>A powerful clipboard manager for macOS with Touch ID protection, smart snippets, and iCloud sync.</strong>
+  <strong>A powerful clipboard manager for macOS with Touch ID protection and smart snippets.</strong>
 </p>
 
 <p align="center">
@@ -118,27 +118,11 @@ Automatically detects and flags sensitive content:
 #### 🔒 Auto-Purge Rules
 Configure automatic deletion of sensitive items after a set time (1 minute, 5 minutes, 1 hour).
 
-#### 🔐 End-to-End Encryption
-All synced data is encrypted with AES-256-GCM before leaving your device. Keys stored in macOS Keychain.
-
 #### 🚫 Password Manager Protection
 Detects transient clipboard types (1Password, Dashlane, etc.) and blocks them from history.
 
 #### 📵 Excluded Apps
 Block sensitive apps from clipboard capture entirely.
-
----
-
-### iCloud Sync
-
-Sync your clipboard history across all your Macs:
-
-- **End-to-end encrypted** — Data encrypted before upload
-- **Real-time sync** — Push notifications for instant updates
-- **Conflict resolution** — Last-write-wins with device tracking
-- **Selective sync** — Only syncs when enabled
-
-Enable in Settings → Sync. Requires iCloud account.
 
 ---
 
@@ -165,18 +149,15 @@ Widgets automatically update when you copy new content. Add via right-click desk
 
 ---
 
-### iOS Companion App
+### iOS Companion App *(Coming Soon)*
 
 View your clipboard history on iPhone and iPad:
 
-- **History Tab** — Browse all recent clips synced from your Mac
+- **History Tab** — Browse recent clips shared via App Groups
 - **Pinned Tab** — Quick access to your favorites
-- **Copy to iOS** — Swipe any item to copy it to your iPhone clipboard
 - **iOS Widgets** — Recent and Pinned clips for Home Screen and Lock Screen
 
-The iOS app syncs via iCloud, so your clipboard history is available everywhere. Copy on Mac, paste on iPhone.
-
-*Requires iCloud sync enabled on both devices.*
+*iOS app is in development. Currently works with shared App Groups for widget data.*
 
 ---
 
@@ -213,7 +194,6 @@ Control SaneClip programmatically via `saneclip://` URLs:
 | `saneclip://copy?text=Hello` | Copy text to clipboard |
 | `saneclip://history` | Show history window |
 | `saneclip://export` | Trigger history export |
-| `saneclip://sync` | Trigger iCloud sync |
 | `saneclip://clear` | Clear history (with confirmation) |
 
 ### Siri Shortcuts
@@ -241,7 +221,7 @@ Send HTTP notifications when clipboard events occur:
 - **Retry logic** with exponential backoff
 - **Content inclusion** optional (for text items)
 
-Configure in Settings → Webhooks (coming soon in UI).
+Configure programmatically via `WebhookService`. UI settings panel planned for future release.
 
 ---
 
@@ -267,9 +247,8 @@ Download the latest DMG from [saneclip.com](https://saneclip.com) — **$5 one-t
 
 SaneClip is **privacy-first**:
 
-- ✅ All data stays on your Mac (unless iCloud sync enabled)
-- ✅ E2E encryption for all synced data
-- ✅ No analytics or telemetry
+- ✅ All data stays on your Mac — 100% local
+- ✅ No cloud sync, no analytics, no telemetry
 - ✅ Open source — verify yourself
 
 See [PRIVACY.md](PRIVACY.md) for details.

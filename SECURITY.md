@@ -4,6 +4,8 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 1.2.x   | ✅ Yes             |
+| 1.1.x   | ✅ Yes             |
 | 1.0.x   | ✅ Yes             |
 | < 1.0   | ❌ No              |
 
@@ -23,7 +25,7 @@ SaneClip includes several security features:
 
 ### Local-Only Storage
 - All clipboard data stored locally in `~/Library/Application Support/SaneClip/`
-- No cloud sync (yet) — your data stays on your Mac
+- 100% on-device — no cloud sync, no network calls
 - No analytics or telemetry
 
 ### Hardened Runtime

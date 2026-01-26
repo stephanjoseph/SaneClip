@@ -7,8 +7,8 @@
 
 SaneClip is **privacy-first by design**:
 
-- ✅ All data stays on your Mac
-- ✅ No cloud sync (yet)
+- ✅ All data stays on your Mac — 100% local
+- ✅ No cloud sync, no network calls
 - ✅ No analytics or telemetry
 - ✅ No account required
 - ✅ Open source — verify yourself
@@ -49,7 +49,7 @@ SaneClip is **privacy-first by design**:
 
 ### Sparkle (Auto-Updates)
 - SaneClip uses [Sparkle](https://sparkle-project.org/) for updates
-- Sparkle checks `https://github.com/stephanjoseph/SaneClip/` for updates
+- Sparkle checks `https://github.com/sane-apps/SaneClip/` for updates
 - No personal data is transmitted — only app version
 
 ### Lemon Squeezy (Payments)
@@ -97,7 +97,7 @@ We may update this policy occasionally. Changes will be noted with a new "Last U
 
 Questions about privacy?
 
-- GitHub: [github.com/stephanjoseph/SaneClip](https://github.com/stephanjoseph/SaneClip)
+- GitHub: [github.com/sane-apps/SaneClip](https://github.com/sane-apps/SaneClip)
 - Email: [privacy@saneapps.com](mailto:privacy@saneapps.com)
 
 ---
@@ -107,7 +107,7 @@ Questions about privacy?
 SaneClip is open source. You can verify our privacy claims by reviewing the code:
 
 ```bash
-git clone https://github.com/stephanjoseph/SaneClip.git
+git clone https://github.com/sane-apps/SaneClip.git
 # Search for network calls — you won't find any (except Sparkle updates)
 grep -r "URLSession\|URLRequest\|Network" SaneClip/
 ```

@@ -6,6 +6,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ---
 
+## [1.2] - 2026-01-25
+
+### Removed
+- **iCloud Sync** — Removed CloudKit sync infrastructure pending Apple Developer provisioning resolution
+- **End-to-End Encryption** — Removed encryption service (was for sync feature)
+- **Sync Settings UI** — Removed sync settings panel from preferences
+
+### Changed
+- **100% Local** — All clipboard data now stays entirely on-device
+- **Simplified architecture** — Reduced complexity by removing sync-related code
+
+### Technical
+- Deleted `CloudKitSyncService.swift`, `EncryptionService.swift`, `SyncSettingsView.swift`
+- Updated entitlements to remove iCloud containers
+- Distribution now via Cloudflare R2 (dist.saneclip.com)
+
+### Note
+iCloud sync may return in a future version once provisioning issues are resolved. The current version is fully functional as a local-only clipboard manager.
+
+---
+
 ## [1.1] - 2026-01-18
 
 ### Added
