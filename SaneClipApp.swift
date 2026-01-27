@@ -39,19 +39,19 @@ class UpdateService: NSObject, ObservableObject {
 // MARK: - Keyboard Shortcuts Extension
 
 extension KeyboardShortcuts.Name {
-    static let showClipboardHistory = Self("showClipboardHistory")
-    static let pasteAsPlainText = Self("pasteAsPlainText")
-    static let pasteFromStack = Self("pasteFromStack")
+    static let showClipboardHistory = Self("showClipboardHistory", default: .init(.v, modifiers: [.command, .shift]))
+    static let pasteAsPlainText = Self("pasteAsPlainText", default: .init(.v, modifiers: [.command, .shift, .option]))
+    static let pasteFromStack = Self("pasteFromStack", default: .init(.v, modifiers: [.command, .control]))
     // Quick paste shortcuts for items 1-9
-    static let pasteItem1 = Self("pasteItem1")
-    static let pasteItem2 = Self("pasteItem2")
-    static let pasteItem3 = Self("pasteItem3")
-    static let pasteItem4 = Self("pasteItem4")
-    static let pasteItem5 = Self("pasteItem5")
-    static let pasteItem6 = Self("pasteItem6")
-    static let pasteItem7 = Self("pasteItem7")
-    static let pasteItem8 = Self("pasteItem8")
-    static let pasteItem9 = Self("pasteItem9")
+    static let pasteItem1 = Self("pasteItem1", default: .init(.one, modifiers: [.command, .control]))
+    static let pasteItem2 = Self("pasteItem2", default: .init(.two, modifiers: [.command, .control]))
+    static let pasteItem3 = Self("pasteItem3", default: .init(.three, modifiers: [.command, .control]))
+    static let pasteItem4 = Self("pasteItem4", default: .init(.four, modifiers: [.command, .control]))
+    static let pasteItem5 = Self("pasteItem5", default: .init(.five, modifiers: [.command, .control]))
+    static let pasteItem6 = Self("pasteItem6", default: .init(.six, modifiers: [.command, .control]))
+    static let pasteItem7 = Self("pasteItem7", default: .init(.seven, modifiers: [.command, .control]))
+    static let pasteItem8 = Self("pasteItem8", default: .init(.eight, modifiers: [.command, .control]))
+    static let pasteItem9 = Self("pasteItem9", default: .init(.nine, modifiers: [.command, .control]))
 }
 
 // MARK: - AppDelegate

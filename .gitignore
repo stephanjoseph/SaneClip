@@ -38,6 +38,10 @@ releases/
 .claude/state.json
 .claude/audit.jsonl
 
+# Claude memory logs (auto-generated, no real content)
+**/CLAUDE.md
+!/CLAUDE.md
+
 # IDE
 .cursor/settings.json
 .vscode/settings.json
@@ -46,6 +50,9 @@ releases/
 /*.png
 /*.jpg
 !Resources/Assets.xcassets/**/*.png
+
+# Provisioning Profiles (sensitive - don't commit)
+Provisioning/
 
 # Fastlane
 fastlane/keys/

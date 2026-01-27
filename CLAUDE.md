@@ -76,6 +76,12 @@ mcp__plugin_claude-mem_mcp-search__search query: "topic" project: "SaneClip"
 
 ---
 
+## Distribution — NO HOMEBREW
+
+SaneApps are distributed via **Cloudflare R2** (`dist.{app}.com`) + Sparkle auto-update. **Do NOT create Homebrew casks/formulas.** No `homebrew/` directory, no `.rb` formula files.
+
+---
+
 ## DMG & Icon Rules (CRITICAL)
 
 **App Icons:** Must be FULL SQUARE canvases — no squircle, no drop shadow baked in. macOS applies its own squircle mask. Use `CGImageAlphaInfo.noneSkipLast` for opaque output. See `scripts/generate_icon.swift`.
