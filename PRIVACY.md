@@ -47,15 +47,11 @@ SaneClip is **privacy-first by design**:
 
 ## Third-Party Services
 
-### Sparkle (Auto-Updates)
-- SaneClip uses [Sparkle](https://sparkle-project.org/) for updates
-- Sparkle checks `https://github.com/sane-apps/SaneClip/` for updates
-- No personal data is transmitted — only app version
-
-### Lemon Squeezy (Payments)
-- If you purchase SaneClip, payment is handled by [Lemon Squeezy](https://lemonsqueezy.com/)
-- We do not receive or store payment details
-- See Lemon Squeezy's privacy policy for their practices
+### Sparkle (Auto-Updates) — Direct Download Version Only
+- The version of SaneClip downloaded from [saneclip.com](https://saneclip.com) uses [Sparkle](https://sparkle-project.org/) for automatic updates
+- Sparkle checks our update feed for new versions
+- No personal data is transmitted — only the app version
+- The Mac App Store version does not include Sparkle; updates are handled entirely by the App Store
 
 ---
 

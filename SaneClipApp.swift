@@ -1,12 +1,15 @@
 import SwiftUI
 import AppKit
 import KeyboardShortcuts
+#if !APP_STORE
 import Sparkle
+#endif
 import LocalAuthentication
 import os.log
 
 private let appLogger = Logger(subsystem: "com.saneclip.app", category: "App")
 
+#if !APP_STORE
 // MARK: - Update Service
 
 @MainActor
@@ -35,6 +38,7 @@ class UpdateService: NSObject, ObservableObject {
         set { updaterController?.updater.automaticallyChecksForUpdates = newValue }
     }
 }
+#endif
 
 // MARK: - Keyboard Shortcuts Extension
 
@@ -61,7 +65,9 @@ class SaneClipAppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem!
     private var popover: NSPopover!
     private var clipboardManager: ClipboardManager!
+    #if !APP_STORE
     private var updateService: UpdateService!
+    #endif
     private var onboardingWindow: NSWindow?
     nonisolated(unsafe) private var menuBarIconObserver: NSObjectProtocol?
 
@@ -78,8 +84,10 @@ class SaneClipAppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         appLogger.info("SaneClip starting...")
 
+        #if !APP_STORE
         // Initialize update service (Sparkle)
         updateService = UpdateService.shared
+        #endif
 
         // Apply dock visibility setting (must happen early)
         _ = SettingsModel.shared

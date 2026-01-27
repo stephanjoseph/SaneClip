@@ -93,7 +93,11 @@ struct SettingsView: View {
 struct GeneralSettingsView: View {
     @State private var settings = SettingsModel.shared
     @State private var launchAtLogin = false
+    #if !APP_STORE
     @State private var autoCheckUpdates = UpdateService.shared.automaticallyChecksForUpdates
+    #else
+    @State private var autoCheckUpdates = false
+    #endif
     @State private var isAuthenticating = false
 
     var body: some View {
@@ -177,6 +181,7 @@ struct GeneralSettingsView: View {
                     )
                 }
 
+                #if !APP_STORE
                 CompactSection("Software Updates") {
                     CompactToggle(label: "Check for updates automatically", isOn: Binding(
                         get: { autoCheckUpdates },
@@ -194,6 +199,7 @@ struct GeneralSettingsView: View {
                         .controlSize(.small)
                     }
                 }
+                #endif
 
                 CompactSection("History") {
                     CompactRow("Maximum Items") {
@@ -273,7 +279,9 @@ struct GeneralSettingsView: View {
         }
         .onAppear {
             checkLaunchAtLogin()
+            #if !APP_STORE
             autoCheckUpdates = UpdateService.shared.automaticallyChecksForUpdates
+            #endif
         }
     }
 
@@ -713,6 +721,7 @@ struct AboutSettingsView: View {
             }
             .padding(.top, 12)
 
+            #if !APP_STORE
             // Check for Updates
             Button {
                 checkForUpdates()
@@ -721,6 +730,7 @@ struct AboutSettingsView: View {
             }
             .buttonStyle(.bordered)
             .controlSize(.regular)
+            #endif
 
             Spacer()
         }
@@ -734,9 +744,11 @@ struct AboutSettingsView: View {
         }
     }
 
+    #if !APP_STORE
     private func checkForUpdates() {
         UpdateService.shared.checkForUpdates()
     }
+    #endif
 
     // MARK: - Licenses Sheet
 

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support — SaneClip</title>
+    <meta name="description" content="Get help with SaneClip. FAQ, troubleshooting, and contact information.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://saneclip.com/support">
+    <link rel="icon" type="image/png" sizes="256x256" href="images/icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a24;
+            --text-primary: #f5f5f7;
+            --text-secondary: #a1a1aa;
+            --accent: #0099ff;
+            --accent-soft: #0077cc;
+            --accent-subtle: rgba(0, 153, 255, 0.15);
+            --accent-glow: rgba(0, 153, 255, 0.3);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-subtle: rgba(255, 255, 255, 0.04);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 16px 0;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        nav .container {
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo {
+            display: flex; align-items: center; gap: 12px;
+            font-weight: 600; font-size: 1.25rem;
+            color: var(--text-primary); text-decoration: none;
+        }
+        .logo img { width: 32px; height: 32px; border-radius: 8px; }
+        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links a {
+            color: var(--text-secondary); text-decoration: none;
+            font-size: 0.95rem; transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text-primary); }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+        .content { padding: 120px 0 80px; }
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem; font-weight: 600;
+            margin-bottom: 8px; letter-spacing: -0.02em;
+        }
+        .subtitle {
+            color: var(--text-secondary); font-size: 1.1rem;
+            margin-bottom: 48px;
+        }
+        h2 {
+            font-size: 1.4rem; font-weight: 600;
+            margin: 40px 0 16px; color: var(--accent);
+        }
+        p, li { color: var(--text-secondary); margin-bottom: 12px; }
+        ul { padding-left: 24px; margin-bottom: 16px; }
+        li { margin-bottom: 6px; }
+        strong { color: var(--text-primary); }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .contact-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            margin: 32px 0;
+            text-align: center;
+        }
+        .contact-card .email {
+            font-size: 1.3rem; font-weight: 600;
+            color: var(--accent); margin: 16px 0 8px;
+        }
+        .btn {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 14px 28px; border-radius: 12px;
+            font-weight: 600; font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer; border: none;
+        }
+        .btn:hover { text-decoration: none; }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
+            color: white;
+            box-shadow: 0 4px 20px var(--accent-glow);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--accent-glow);
+        }
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            background: var(--accent-subtle);
+        }
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+        .faq-item h3 {
+            font-size: 1.05rem; font-weight: 600;
+            margin-bottom: 8px; color: var(--text-primary);
+        }
+        .faq-item p { margin-bottom: 0; }
+        code {
+            background: var(--bg-secondary);
+            padding: 2px 8px; border-radius: 4px;
+            font-size: 0.9rem; color: var(--accent);
+        }
+        hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 40px 0;
+        }
+        .cta-buttons {
+            display: flex; gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 24px 0;
+        }
+        footer {
+            padding: 40px 0; border-top: 1px solid var(--border-subtle);
+            text-align: center;
+        }
+        footer a { color: var(--text-secondary); }
+        footer a:hover { color: var(--accent); text-decoration: none; }
+        footer p { color: var(--text-secondary); font-size: 0.9rem; }
+        @media (max-width: 600px) {
+            .nav-links { display: none; }
+            h1 { font-size: 1.75rem; }
+            .content { padding: 100px 0 60px; }
+            .cta-buttons { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="/" class="logo">
+                <img src="images/icon.png" alt="SaneClip">
+                SaneClip
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/privacy">Privacy</a>
+                <a href="https://github.com/sane-apps/SaneClip">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="container">
+            <h1>Support</h1>
+            <p class="subtitle">Need help with SaneClip? We're here for you.</p>
+
+            <div class="contact-card">
+                <p>Reach out anytime</p>
+                <p class="email"><a href="mailto:hi@saneapps.com">hi@saneapps.com</a></p>
+                <p>We typically respond within 24 hours.</p>
+            </div>
+
+            <div class="cta-buttons">
+                <a href="https://github.com/sane-apps/SaneClip/issues" class="btn btn-secondary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    Report an Issue
+                </a>
+            </div>
+
+            <hr>
+
+            <h2>Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <h3>How do I open my clipboard history?</h3>
+                <p>Press <strong>Cmd+Shift+V</strong> (default shortcut) or click the SaneClip icon in your menu bar. You can customize this shortcut in Settings > Shortcuts.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I grant Accessibility permissions?</h3>
+                <p>SaneClip needs Accessibility access to paste content into other apps. Go to <strong>System Settings > Privacy & Security > Accessibility</strong> and enable SaneClip. The app will guide you through this on first launch.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Where is my clipboard data stored?</h3>
+                <p>All data is stored locally at <code>~/Library/Application Support/SaneClip/</code>. Nothing is sent to the cloud or any remote server.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Does SaneClip capture passwords?</h3>
+                <p>SaneClip has built-in password manager detection. When enabled (Settings > Security > "Detect & skip passwords"), it recognizes the quick copy-then-clear pattern used by password managers and automatically removes those entries from history.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>Can I exclude specific apps from clipboard capture?</h3>
+                <p>Yes. Go to <strong>Settings > Security > Excluded Apps</strong> and add any app you want to exclude. Copies from excluded apps will not appear in your history.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I export or back up my data?</h3>
+                <p>Go to <strong>Settings > General > Data</strong> to export or import your clipboard history as JSON. You can also export and import your settings from <strong>Settings > General > Backup & Restore</strong>.</p>
+            </div>
+
+            <div class="faq-item">
+                <h3>How do I reset SaneClip completely?</h3>
+                <p>Quit SaneClip, then delete the folder at <code>~/Library/Application Support/SaneClip/</code>. This removes all history and settings. Relaunch the app to start fresh.</p>
+            </div>
+
+            <hr>
+
+            <h2>System Requirements</h2>
+            <ul>
+                <li><strong>macOS 15 (Sequoia)</strong> or later</li>
+                <li>Apple Silicon (M1 or later)</li>
+                <li>Touch ID recommended for biometric features</li>
+            </ul>
+
+            <hr>
+
+            <p style="text-align: center; margin-top: 32px;">
+                Still need help? Email us at <a href="mailto:hi@saneapps.com">hi@saneapps.com</a>
+            </p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 SaneClip &middot; <a href="/">Home</a> &middot; <a href="/privacy">Privacy</a> &middot; <a href="https://github.com/sane-apps/SaneClip">GitHub</a></p>
+        </div>
+    </footer>
+</body>
+</html>

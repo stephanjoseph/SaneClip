@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy — SaneClip</title>
+    <meta name="description" content="SaneClip privacy policy. 100% on-device clipboard manager with no analytics, no cloud, no tracking.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://saneclip.com/privacy">
+    <link rel="icon" type="image/png" sizes="256x256" href="images/icon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-card: #1a1a24;
+            --text-primary: #f5f5f7;
+            --text-secondary: #a1a1aa;
+            --accent: #0099ff;
+            --accent-soft: #0077cc;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-subtle: rgba(255, 255, 255, 0.04);
+            --success: #34d399;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 16px 0;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+        nav .container {
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo {
+            display: flex; align-items: center; gap: 12px;
+            font-weight: 600; font-size: 1.25rem;
+            color: var(--text-primary); text-decoration: none;
+        }
+        .logo img { width: 32px; height: 32px; border-radius: 8px; }
+        .nav-links { display: flex; gap: 24px; align-items: center; }
+        .nav-links a {
+            color: var(--text-secondary); text-decoration: none;
+            font-size: 0.95rem; transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text-primary); }
+        .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+        .content { padding: 120px 0 80px; }
+        h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 2.5rem; font-weight: 600;
+            margin-bottom: 8px; letter-spacing: -0.02em;
+        }
+        .updated {
+            color: var(--text-secondary); font-size: 0.95rem;
+            margin-bottom: 48px;
+        }
+        h2 {
+            font-size: 1.4rem; font-weight: 600;
+            margin: 40px 0 16px; color: var(--accent);
+        }
+        h3 {
+            font-size: 1.1rem; font-weight: 600;
+            margin: 24px 0 8px;
+        }
+        p, li { color: var(--text-secondary); margin-bottom: 12px; }
+        ul { padding-left: 24px; margin-bottom: 16px; }
+        li { margin-bottom: 6px; }
+        strong { color: var(--text-primary); }
+        .highlight {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+        .highlight p { margin-bottom: 8px; }
+        .highlight p:last-child { margin-bottom: 0; }
+        code {
+            background: var(--bg-card);
+            padding: 2px 8px; border-radius: 4px;
+            font-size: 0.9rem; color: var(--accent);
+        }
+        hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 40px 0;
+        }
+        footer {
+            padding: 40px 0; border-top: 1px solid var(--border-subtle);
+            text-align: center;
+        }
+        footer a { color: var(--text-secondary); text-decoration: none; }
+        footer a:hover { color: var(--accent); }
+        footer p { color: var(--text-secondary); font-size: 0.9rem; }
+        @media (max-width: 600px) {
+            .nav-links { display: none; }
+            h1 { font-size: 1.75rem; }
+            .content { padding: 100px 0 60px; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="/" class="logo">
+                <img src="images/icon.png" alt="SaneClip">
+                SaneClip
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/support">Support</a>
+                <a href="https://github.com/sane-apps/SaneClip">GitHub</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content">
+        <div class="container">
+            <h1>Privacy Policy</h1>
+            <p class="updated">Effective January 2026 &middot; Last updated January 2026</p>
+
+            <div class="highlight">
+                <p><strong>The Short Version:</strong></p>
+                <p>SaneClip is <strong>privacy-first by design</strong>. All data stays on your Mac. No cloud sync, no network calls, no analytics, no account required. The code is open source — verify yourself.</p>
+            </div>
+
+            <h2>What Data SaneClip Collects</h2>
+
+            <h3>Clipboard History</h3>
+            <ul>
+                <li><strong>What:</strong> Text and images you copy</li>
+                <li><strong>Where:</strong> Stored locally in <code>~/Library/Application Support/SaneClip/</code></li>
+                <li><strong>Retention:</strong> Configurable (default: 100 items)</li>
+                <li><strong>Encryption:</strong> Not encrypted at rest (protected by macOS file permissions and optional Touch ID)</li>
+            </ul>
+
+            <h3>User Preferences</h3>
+            <ul>
+                <li><strong>What:</strong> Settings like history size, Touch ID preference, keyboard shortcuts</li>
+                <li><strong>Where:</strong> macOS UserDefaults (local only)</li>
+                <li><strong>Shared:</strong> Never</li>
+            </ul>
+
+            <h3>Crash Reports</h3>
+            <ul>
+                <li><strong>What:</strong> If the app crashes, macOS may collect crash logs</li>
+                <li><strong>Where:</strong> Stored locally by macOS</li>
+                <li><strong>Shared:</strong> Only if you manually submit to Apple</li>
+            </ul>
+
+            <hr>
+
+            <h2>What SaneClip Does NOT Collect</h2>
+            <ul>
+                <li>Personal information (name, email, etc.)</li>
+                <li>Usage analytics or telemetry</li>
+                <li>Keystroke logging</li>
+                <li>Screenshots</li>
+                <li>Any data sent to remote servers</li>
+            </ul>
+
+            <hr>
+
+            <h2>Third-Party Services</h2>
+
+            <h3>Sparkle (Auto-Updates) — Direct Download Version Only</h3>
+            <p>The version of SaneClip downloaded directly from <a href="https://saneclip.com" style="color: var(--accent);">saneclip.com</a> uses <a href="https://sparkle-project.org/" style="color: var(--accent);">Sparkle</a> for automatic updates. Sparkle checks for new versions by contacting our update feed. No personal data is transmitted — only the app version is sent.</p>
+            <p>The Mac App Store version does not include Sparkle. Updates are handled entirely by the App Store.</p>
+
+            <hr>
+
+            <h2>Password Manager Protection</h2>
+            <p>SaneClip includes optional protection for password managers:</p>
+            <ul>
+                <li>Detects "quick-clear" patterns (copy then clear within 3 seconds)</li>
+                <li>Automatically removes these entries from history</li>
+                <li>Designed to prevent accidental storage of passwords</li>
+            </ul>
+            <p><strong>Important:</strong> This is a best-effort feature, not a security guarantee. For sensitive credentials, use a dedicated password manager.</p>
+
+            <hr>
+
+            <h2>Your Rights</h2>
+            <p>Since all data is stored locally, you have full control:</p>
+            <ul>
+                <li><strong>Access:</strong> View all data in <code>~/Library/Application Support/SaneClip/</code></li>
+                <li><strong>Delete:</strong> Clear history anytime via the app, or delete the folder</li>
+                <li><strong>Export:</strong> Export your clipboard history and settings from the Settings panel</li>
+            </ul>
+
+            <hr>
+
+            <h2>Children's Privacy</h2>
+            <p>SaneClip does not knowingly collect data from children under 13. The app does not require any account or personal information.</p>
+
+            <hr>
+
+            <h2>Changes to This Policy</h2>
+            <p>We may update this policy occasionally. Changes will be noted with a new "Last Updated" date. For significant changes, we'll include a notice in the app's release notes.</p>
+
+            <hr>
+
+            <h2>Contact</h2>
+            <p>Questions about privacy?</p>
+            <ul>
+                <li>Email: <a href="mailto:hi@saneapps.com" style="color: var(--accent);">hi@saneapps.com</a></li>
+                <li>GitHub: <a href="https://github.com/sane-apps/SaneClip" style="color: var(--accent);">github.com/sane-apps/SaneClip</a></li>
+            </ul>
+
+            <hr>
+
+            <h2>Open Source Transparency</h2>
+            <p>SaneClip is open source. You can verify our privacy claims by reviewing the code at <a href="https://github.com/sane-apps/SaneClip" style="color: var(--accent);">github.com/sane-apps/SaneClip</a>.</p>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 SaneClip &middot; <a href="/">Home</a> &middot; <a href="/support">Support</a> &middot; <a href="https://github.com/sane-apps/SaneClip">GitHub</a></p>
+        </div>
+    </footer>
+</body>
+</html>
