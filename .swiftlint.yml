@@ -4,6 +4,7 @@ excluded:
   - DerivedData
   - SourcePackages
   - Pods
+  - scripts
 
 file_length:
   warning: 1200
