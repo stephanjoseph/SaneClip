@@ -102,7 +102,7 @@
             --bg-secondary: #12121a;
             --bg-card: #1a1a24;
             --text-primary: #f5f5f7;
-            --text-secondary: #a1a1aa;
+            --text-secondary: #c0c0d0;
             --accent: #0099ff;
             --accent-soft: #0077cc;
             --accent-subtle: rgba(0, 153, 255, 0.15);
@@ -184,10 +184,11 @@
         }
 
         .logo-family {
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
             font-weight: 400;
             margin-left: 12px;
+            margin-right: auto;
             padding-left: 12px;
             border-left: 1px solid var(--border);
             text-decoration: none;
@@ -332,38 +333,25 @@
             }
         }
 
-        /* Privacy Badge */
-        .badge-container {
+        /* Trust Badges */
+        .trust-badges {
             display: flex;
-            gap: 12px;
+            gap: 24px;
             justify-content: center;
             flex-wrap: wrap;
             margin-bottom: 32px;
+            font-size: 1.17rem;
+            color: var(--text-secondary);
         }
 
-        .privacy-badge, .free-badge {
-            display: inline-flex;
+        .trust-badges span {
+            display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px 20px;
-            border-radius: 100px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            letter-spacing: 0.02em;
+            gap: 6px;
         }
 
-        .privacy-badge {
-            background: var(--success-soft);
-            border: 1px solid rgba(52, 211, 153, 0.25);
-            color: var(--success);
-            box-shadow: 0 2px 12px rgba(52, 211, 153, 0.15);
-        }
-
-        .free-badge {
-            background: var(--accent-subtle);
-            border: 1px solid rgba(0, 153, 255, 0.3);
-            color: var(--accent);
-            box-shadow: 0 2px 12px var(--accent-glow);
+        .trust-badges a:hover {
+            color: var(--accent) !important;
         }
 
         /* Hero Screenshot */
@@ -428,13 +416,13 @@
         }
 
         .demo-item-meta {
-            font-size: 0.8rem;
+            font-size: 0.875rem;
             color: var(--text-secondary);
         }
 
         .demo-item-shortcut {
             font-family: 'SF Mono', Monaco, monospace;
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             color: var(--text-secondary);
             opacity: 0.6;
         }
@@ -926,10 +914,6 @@
             border-bottom: none;
         }
 
-        .comparison-table tbody tr:hover {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
         .feature-name {
             text-align: left !important;
             min-width: 200px;
@@ -1050,10 +1034,93 @@
             margin-top: 12px;
         }
 
-        @media (max-width: 600px) {
-            .nav-links {
-                display: none;
-            }
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 200;
+            color: var(--text-primary);
+        }
+
+        .hamburger svg { display: block; }
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(8, 8, 12, 0.97);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 150;
+            padding: 80px 32px 40px;
+            overflow-y: auto;
+            flex-direction: column;
+        }
+
+        .mobile-nav.open { display: flex; }
+
+        .mobile-nav a {
+            display: block;
+            padding: 16px 0;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-bottom: 1px solid var(--border);
+            transition: color 0.2s;
+        }
+
+        .mobile-nav a:active { color: var(--accent); }
+
+        .mobile-nav-section {
+            padding: 20px 0 8px;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+        }
+
+        .mobile-nav-section:first-child { padding-top: 0; }
+
+        .mobile-nav .mobile-nav-cta {
+            display: flex;
+            margin-top: 24px;
+            padding: 16px 28px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
+            color: #fff !important;
+            font-weight: 600;
+            border-radius: 12px;
+            text-align: center;
+            justify-content: center;
+            border-bottom: none;
+            box-shadow: 0 4px 16px var(--accent-glow);
+        }
+
+        .mobile-nav-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px;
+            font-size: 1.5rem;
+            line-height: 1;
+            z-index: 200;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger { display: block; }
+            .nav-links { display: none; }
+            .logo-family { display: none; }
 
             .hero {
                 padding: 120px 0 60px;
@@ -1068,6 +1135,21 @@
                 width: 100%;
                 max-width: 300px;
                 justify-content: center;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 12px;
+                align-items: center;
+            }
+
+            section {
+                padding-top: 48px !important;
+                padding-bottom: 48px !important;
+            }
+
+            .hero {
+                padding-top: 110px !important;
             }
         }
     </style>
@@ -1092,6 +1174,7 @@
             <div class="nav-links">
                 <a href="#features">Features</a>
                 <a href="#compare">Compare</a>
+                <a href="https://sanebar.com/guides.html">Guides</a>
                 <a href="https://github.com/sane-apps/SaneClip">GitHub</a>
                 <a href="#support" class="btn btn-primary btn-donate">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="#ef4444" stroke="#ffffff" stroke-width="1.5">
@@ -1100,29 +1183,37 @@
                     Donate
                 </a>
             </div>
+            <button class="hamburger" onclick="toggleMobileNav()" aria-label="Menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
         </div>
     </nav>
 
+    <div id="mobileNav" class="mobile-nav">
+        <button class="mobile-nav-close" onclick="toggleMobileNav()" aria-label="Close menu">&times;</button>
+        <p class="mobile-nav-section">Navigation</p>
+        <a href="#features" onclick="toggleMobileNav()">Features</a>
+        <a href="#compare" onclick="toggleMobileNav()">Compare</a>
+        <a href="https://sanebar.com/guides.html" onclick="toggleMobileNav()">Guides</a>
+        <a href="https://github.com/sane-apps/SaneClip">GitHub</a>
+        <a href="#support" onclick="toggleMobileNav()">Donate</a>
+        <p class="mobile-nav-section">More SaneApps</p>
+        <a href="https://sanebar.com">SaneBar &mdash; Menu Bar Manager</a>
+        <a href="https://sanehosts.com">SaneHosts &mdash; System-Level Ad Blocker</a>
+        <a href="https://saneapps.com">See all SaneApps &rarr;</a>
+        <a href="https://sanebar.lemonsqueezy.com/checkout/buy/e0d71010-bd20-49b6-b841-5522b39df95f" class="mobile-nav-cta">Download SaneClip &mdash; $5</a>
+    </div>
+
     <section class="hero">
         <div class="container">
-            <div class="badge-container animate-in delay-1">
-                <div class="privacy-badge">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                    </svg>
-                    100% On-Device
-                </div>
-                <div class="free-badge">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <path d="M12 6v6l4 2"/>
-                    </svg>
-                    macOS Sonoma+
-                </div>
+            <h1 class="animate-in delay-1">Bring <em>Sanity</em> to your Clipboard</h1>
+            <p class="subtitle animate-in delay-2">The <em>only</em> clipboard manager with Touch ID protection. Your copy history never leaves your Mac.</p>
+            <div class="trust-badges animate-in delay-3">
+                <a href="https://github.com/sane-apps/SaneClip" style="color: inherit; text-decoration: none;"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: -2px; margin-right: 4px;"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>Provably private</a>
+                <span>&#x1F4B5; No subscription</span>
+                <span>&#x1F6E0;&#xFE0F; Actively maintained</span>
             </div>
-            <h1 class="animate-in delay-2">A <em>Sane</em> Clipboard Manager</h1>
-            <p class="subtitle animate-in delay-3">Beautiful clipboard history with <em>Touch ID protection</em>. Access everything you've copied with lightning-fast keyboard shortcuts.</p>
-            <div class="cta-buttons animate-in delay-4">
+            <div class="cta-buttons animate-in delay-3">
                 <a href="https://sanebar.lemonsqueezy.com/checkout/buy/e0d71010-bd20-49b6-b841-5522b39df95f" class="btn btn-primary">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -1131,13 +1222,8 @@
                     </svg>
                     Download — $5
                 </a>
-                <a href="https://github.com/sane-apps/SaneClip" class="btn btn-secondary">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
-                    Help Build It
-                </a>
             </div>
+            <p class="system-requirements animate-in delay-4" style="color: var(--text-secondary); font-size: 0.875rem; margin-top: -28px; margin-bottom: 40px;">Requires macOS 14.0 (Sonoma) or later</p>
 
             <!-- Demo Preview - Actual Screenshot -->
             <div class="hero-screenshot animate-in delay-5">
@@ -1341,17 +1427,6 @@
                             <td><span class="cross">&#10007;</span></td>
                             <td><span class="cross">&#10007;</span></td>
                         </tr>
-                        <tr>
-                            <td class="feature-name">
-                                <span class="feature-label">Native SwiftUI</span>
-                                <span class="feature-desc">Built for macOS 14+</span>
-                            </td>
-                            <td class="highlight-col"><span class="check">&#10003;</span></td>
-                            <td><span class="check">&#10003;</span></td>
-                            <td><span class="check">&#10003;</span></td>
-                            <td><span class="check">&#10003;</span></td>
-                            <td><span class="check">&#10003;</span></td>
-                        </tr>
                         <!-- COMMON FEATURES -->
                         <tr>
                             <td class="feature-name">
@@ -1451,7 +1526,7 @@
 
     <section class="more-apps">
         <div class="container">
-            <h2 class="section-title">More from Sane Apps</h2>
+            <h2 class="section-title">More from SaneApps</h2>
             <p class="more-apps-subtitle">Privacy-first Mac utilities that don't suck</p>
             <div class="more-apps-grid">
                 <a href="https://sanebar.com" class="app-card">
@@ -1482,8 +1557,9 @@
             <p class="footer-quote">"For God has not given us a spirit of fear, but of power, love, and a sound mind." — 2 Timothy 1:7</p>
             <p class="footer-privacy"><strong>0% Telemetry</strong>. <strong>0% Cloud</strong>. <strong>100% On-Device</strong>.</p>
             <div class="footer-links">
+                <a href="https://sanebar.com/guides.html">Guides</a>
                 <a href="https://github.com/sane-apps/SaneClip">GitHub</a>
-                <a href="/support">Support</a>
+                <a href="/support">Help</a>
                 <a href="/privacy">Privacy Policy</a>
                 <a href="https://github.com/sane-apps/SaneClip/blob/main/LICENSE">MIT License</a>
             </div>
@@ -1493,6 +1569,13 @@
     </footer>
 
     <script>
+        // Mobile Nav Toggle
+        function toggleMobileNav() {
+            var nav = document.getElementById('mobileNav');
+            nav.classList.toggle('open');
+            document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+        }
+
         // Lightbox Modal for feature cards
         function openLightbox(src, caption) {
             const lightbox = document.getElementById('lightbox');
