@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaneClip Guides - Master Your Mac's Clipboard</title>
+    <meta name="description" content="Tutorials and guides for SaneClip. Learn how to secure your clipboard history with Touch ID and boost your productivity on macOS.">
+    <link rel="icon" type="image/png" href="images/icon.png">
+    <link rel="apple-touch-icon" href="images/icon.png">
+    <link rel="canonical" href="https://saneclip.com/guides.html">
+    <meta name="theme-color" content="#0099ff">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://saneclip.com/guides.html">
+    <meta property="og:title" content="SaneClip Guides — Master Your Mac's Clipboard">
+    <meta property="og:description" content="Tutorials for clipboard history, Touch ID security, text transforms, and paste stack shortcuts on macOS.">
+    <meta property="og:image" content="https://saneclip.com/images/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="SaneClip">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SaneClip Guides — Master Your Mac's Clipboard">
+    <meta name="twitter:description" content="Tutorials for clipboard history, Touch ID security, text transforms, and paste stack shortcuts on macOS.">
+    <meta name="twitter:image" content="https://saneclip.com/images/og-image.png">
+    <meta name="twitter:site" content="@saneapps">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-primary: #08080c;
+            --bg-secondary: #0f0f16;
+            --bg-card: #16161f;
+            --accent: #0099ff;
+            --accent-soft: #0077cc;
+            --accent-glow: rgba(0, 153, 255, 0.25);
+            --text-primary: #f5f5f8;
+            --text-secondary: #c0c0d0;
+            --text-muted: #a0a0b0;
+            --border: #252530;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+
+        /* Fixed Navbar */
+        nav {
+            padding: 20px 0;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 100;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+        nav .container { display: flex; justify-content: space-between; align-items: center; }
+
+        .logo { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 1.25rem; text-decoration: none; color: var(--text-primary); }
+        .logo img { width: 32px; height: 32px; border-radius: 8px; }
+
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.95rem; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text-primary); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
+            color: #ffffff !important;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            box-shadow: 0 4px 24px var(--accent-glow);
+        }
+
+        /* Header with luxury spacing */
+        header.header {
+            padding: 220px 24px 80px !important;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            margin-bottom: 24px;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Grid */
+        .guides-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+            padding-bottom: 120px;
+        }
+
+        .guide-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .guide-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+        }
+
+        .guide-icon { font-size: 2.5rem; margin-bottom: 20px; }
+
+        .guide-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .guide-card p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            flex-grow: 1;
+        }
+
+        .read-more {
+            margin-top: 24px;
+            color: var(--accent);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        footer {
+            padding: 60px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-secondary);
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            header.header { padding-top: 140px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/icon.png" alt="SaneClip">
+                SaneClip
+            </a>
+            <div class="nav-links">
+                <a href="index.html#features">Features</a>
+                <a href="https://sanebar.lemonsqueezy.com/checkout/buy/e0d71010-bd20-49b6-b841-5522b39df95f" class="btn-primary">Buy $5</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header class="header">
+            <h1>SaneClip Guides</h1>
+            <p>Everything you need to master your copy history, secure your private data, and automate your workflow.</p>
+        </header>
+
+        <div class="guides-grid">
+            <!-- Guide 1: History -->
+            <a href="how-to-see-clipboard-history-mac.html" class="guide-card">
+                <div class="guide-icon">📋</div>
+                <h2>How to See Clipboard History</h2>
+                <p>macOS only remembers the last thing you copied. Learn how to unlock a deep, searchable history of everything you've ever copied.</p>
+                <div class="read-more">Read Guide &rarr;</div>
+            </a>
+
+            <!-- Guide 2: Touch ID -->
+            <a href="how-to-protect-clipboard-history-touch-id-mac.html" class="guide-card">
+                <div class="guide-icon">🔐</div>
+                <h2>Lock History with Touch ID</h2>
+                <p>Stop leaving passwords and private keys exposed in your clipboard. Secure your copy history with biometric protection.</p>
+                <div class="read-more">Read Guide &rarr;</div>
+            </a>
+
+            <!-- Guide 3: Snippets -->
+            <a href="how-to-pin-text-snippets-mac.html" class="guide-card">
+                <div class="guide-icon">📌</div>
+                <h2>How to Pin Text Snippets</h2>
+                <p>Stop hunting through Apple Notes for frequently used text. Pin your snippets directly to your clipboard menu for instant access.</p>
+                <div class="read-more">Read Guide &rarr;</div>
+            </a>
+
+            <!-- Guide 4: Paste Stack -->
+            <a href="how-to-paste-multiple-items-mac.html" class="guide-card">
+                <div class="guide-icon">🥞</div>
+                <h2>Paste Multiple Items in Order</h2>
+                <p>The "Paste Stack" is a game changer for forms and spreadsheets. Copy 10 items, paste them in order without switching apps.</p>
+                <div class="read-more">Read Guide &rarr;</div>
+            </a>
+
+            <!-- Guide 5: Transforms -->
+            <a href="how-to-transform-text-case-mac.html" class="guide-card">
+                <div class="guide-icon">🔡</div>
+                <h2>Transform Text Case Instantly</h2>
+                <p>UPPERCASE, lowercase, or camelCase—convert text formats instantly without using insecure online tools.</p>
+                <div class="read-more">Read Guide &rarr;</div>
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Part of the <a href="https://saneapps.com">SaneApps</a> family.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
